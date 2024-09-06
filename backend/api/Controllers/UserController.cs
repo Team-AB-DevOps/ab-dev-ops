@@ -1,5 +1,4 @@
 ﻿using api.Abstractions;
-using api.Mappers;
 using api.Models.DTOs;
 using api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -40,8 +39,8 @@ public class UserController : ControllerBase
             Password = hashedPassword
         };
 
-        var savedUser = await _userRepository.CreateUser(newUser);
-        var userDto = savedUser.ToDto();
+        await _userRepository.CreateUser(newUser);
+        var userDto = new UserResponseDto(newUser.Username, newUser.Email);
         
         return CreatedAtAction(nameof(Login), userDto);
     }
@@ -60,7 +59,9 @@ public class UserController : ControllerBase
 
         if (!matchingPassword)
             return BadRequest(errorMsg);
+        
+        var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
 
-        return Ok(userInDb.ToDto());
+        return Ok(userDto);
     }
 }
