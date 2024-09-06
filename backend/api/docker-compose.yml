@@ -1,0 +1,15 @@
+﻿version: "3.8"
+services:
+  mysql:
+    image: mysql
+    container_name: devops-container      # name of container
+    restart: always                       # always restart
+    environment:
+      MYSQL_DATABASE: 'devops_db'         # name of database
+      MYSQL_ROOT_PASSWORD: 'devops'       # password for root user
+    ports:
+      - '3310:3306'                       # host port 3306 is mapper to docker port 3306
+    volumes:
+      - DEVOPS:/var/lib/mysql
+volumes:
+  DEVOPS:
