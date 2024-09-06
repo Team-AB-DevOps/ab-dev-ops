@@ -1,0 +1,25 @@
+name: Pull Request
+
+on: 
+  pull_request:
+
+jobs:
+  Run Tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+      
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v4
+
+    - name: Run Tests
+      working-directory: ./backend
+      run: |
+        dotnet test --results-directory ./_test-results
+    
+    - name: Publish Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v2
+      if: always()
+      with:
+        junit_files: ./backend/_test-results/*.xml
