@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Models.Entities;
 
+[Table("users")]
 [Index(nameof(Username), IsUnique = true)]
 [Index(nameof(Email), IsUnique = true)]
 public class User
@@ -12,10 +13,15 @@ public class User
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
     
-    public string Username { get; set; } = null!;
+    [Required]
+    [Column("username")]
+    public string Username { get; set; }
 
-    public string Email { get; set; } = null!;
+    [Required]
+    [Column("email")]
+    public string Email { get; set; }
 
-
-    public string Password { get; set; } = null!;
+    [Required]
+    [Column("password")]
+    public string Password { get; set; }
 }

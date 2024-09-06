@@ -3,20 +3,25 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace api.Models.Entities;
 
+[Table("pages")]
 public class Page
 {
     [Key, DatabaseGenerated((DatabaseGeneratedOption.None))] 
     [Column("title")] 
-    public string Title { get; set; } = null!;
+    [Required]
+    public string Title { get; set; }
 
     [Column("url")]
-    public string Url { get; set; } = null!;
+    [Required]
+    public string Url { get; set; }
 
     [Column("language")]
-    public string Language { get; set; } = null!;
+    [Required]
+    public string Language { get; set; }
 
     [Column("content")]
-    public string Content { get; set; } = null!;
+    [Required]
+    public string Content { get; set; } 
     
     // https://www.entityframeworktutorial.net/faq/set-created-and-modified-date-in-efcore.aspx
     [Column("last_updated")] 

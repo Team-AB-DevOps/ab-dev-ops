@@ -46,4 +46,11 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+
+// Apply migrations
+using var scope = app.Services.CreateScope();
+await using var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+await dbContext.Database.EnsureDeletedAsync();
+await dbContext.Database.MigrateAsync();
+
 app.Run();
