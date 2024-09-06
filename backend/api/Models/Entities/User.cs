@@ -19,6 +19,7 @@ public class User
 
     [Required]
     [Column("email")]
+    [EmailAddress]
     public string Email { get; set; }
 
     [Required]
