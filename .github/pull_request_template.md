@@ -1,15 +1,23 @@
-For udvikler skal der beskrives følgende:
+## What type of PR is this? (check all applicable)
 
-* Hvad indeholder dette PR?
-* Hvordan er det blevet testet?
-* Skal der lægges særligt hensyn til noget kode?
-* Befinder der sig teknisk gæld i koden?
+-   [ ] Refactor
+-   [ ] Feature
+-   [ ] Bug Fix
+-   [ ] Optimization
+-   [ ] Documentation Update
 
+## Description
 
+_Add your description here._
 
-Dette PR skal reviewes i henhold til følgende:
+## Related Tickets & Documents
 
-- [ ] `Giver det mening` - Giver indholdet mening, er commit-beskederne udtømmende og struktureret?
-- [ ] `Feature` - Opfylder PR det, som den har sat sig som mål?
-- [ ] `Testet` - Er PR-koden blevet testet? Hvis ja, hvordan?
+-   Related Issue #
+-   Closes #
 
+## Added/updated tests?
+
+-   [ ] Yes, added
+-   [ ] Yes, updated
+-   [ ] No, and this is why: _please replace this line with details on why tests
+        have not been included_
