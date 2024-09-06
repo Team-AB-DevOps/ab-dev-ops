@@ -87,21 +87,60 @@ public class UserTests
         Assert.Equal(newUser.Email, response.Email);
     }
 
-    // [Fact]
-    // public async Task Login_Wrong_Password_Should_Bad_Request()
-    // {
-    //     
-    // }
-    //
-    // [Fact]
-    // public async Task Login_Non_Existing_Username_Should_Bad_Request()
-    // {
-    //     
-    // }
-    //
-    // [Fact]
-    // public async Task Login_Existing_Username_And_Correct_Password_Should_Success()
-    // {
-    //     
-    // }
+    [Fact]
+    public async Task Login_Wrong_Password_Should_Bad_Request()
+    {
+        // Arrange
+        var userInDb = new User() { Email = "James@gmail.com", Username = "James", Password = "Hashed"};
+        var requestDto = new LoginRequestDto("James", "WrongPw");
+
+        _userRepositoryMock.GetByUsername(requestDto.Username)
+            .Returns(userInDb);
+        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password)
+            .Returns(false);
+        
+        // Act
+        var result = await _userController.Login(requestDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task Login_Non_Existing_Username_Should_Bad_Request()
+    {
+        // Arrange
+        var requestDto = new LoginRequestDto("Shabob", "CorrectPw");
+
+        _userRepositoryMock.GetByUsername(requestDto.Username)
+            .Returns(Task.FromResult<User?>(null)); 
+        
+        // Act
+        var result = await _userController.Login(requestDto);
+
+        // Assert
+        Assert.IsType<BadRequestObjectResult>(result.Result);
+    }
+
+    [Fact]
+    public async Task Login_Existing_Username_And_Correct_Password_Should_Success()
+    {
+        // Arrange
+        var userInDb = new User() { Email = "James@gmail.com", Username = "James", Password = "CorrectPw"};
+        var requestDto = new LoginRequestDto("James", "CorrectPw");
+
+        _userRepositoryMock.GetByUsername(requestDto.Username)
+            .Returns(userInDb);
+        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password)
+            .Returns(true);
+        
+        // Act
+        var result = await _userController.Login(requestDto);
+
+        // Assert
+        var createdResult = Assert.IsType<OkObjectResult>(result.Result);
+        var response = Assert.IsType<UserResponseDto>(createdResult.Value);
+        Assert.Equal(requestDto.Username, response.Username);
+        Assert.Equal(userInDb.Email, response.Email);
+    }
 }
