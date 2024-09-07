@@ -1,5 +1,7 @@
 ﻿using api.Abstractions;
 using api.Models.DTOs;
+using api.Models.Entities;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -7,11 +9,13 @@ namespace api.Controllers;
 [ApiController]
 public class PageController : ControllerBase
 {
+    private readonly IMapper _mapper;
     private readonly IPageRepository _pageRepository;
 
-    public PageController(IPageRepository pageRepository)
+    public PageController(IPageRepository pageRepository, IMapper mapper)
     {
         _pageRepository = pageRepository;
+        _mapper = mapper;
     }
 
 
@@ -20,27 +24,17 @@ public class PageController : ControllerBase
     public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q,
         [FromQuery] string? language = "en")
     {
-        var pageResults = await _pageRepository.GetByContent(q, language);
-        // var pageResultList = pageResults.ToList();
+        var pageResults = (List<Page>)await _pageRepository.GetByContent(q, language);
 
-        var toDto = new List<PageResponseDto>();
-
-        if (pageResults.Any())
+        if (pageResults.Count == 0)
         {
-            return Ok(toDto);
+            return Ok(new List<PageResponseDto>());
         }
 
-        foreach (var page in pageResults)
-        {
-            if (page == null)
-            {
-                continue;
-            }
+        var pageResultsDto = pageResults
+            .Select(page => _mapper.Map<PageResponseDto>(page))
+            .ToList();
 
-            var pageDto = new PageResponseDto(page.Title, page.Url, page.Language, page.Content);
-            toDto.Add(pageDto);
-        }
-
-        return Ok(toDto);
+        return Ok(pageResultsDto);
     }
 }

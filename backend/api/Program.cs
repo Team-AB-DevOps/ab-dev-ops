@@ -19,6 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 // DB CONNECTION
 var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 if (string.IsNullOrEmpty(connectionString))
