@@ -1,10 +1,14 @@
 name: Pull Request
 
+permissions:
+  checks: write
+  pull-requests: write
+
 on: 
   pull_request:
 
 jobs:
-  Run Tests:
+  Run_Backend_Tests:
     runs-on: ubuntu-latest
     
     steps:
@@ -18,11 +22,11 @@ jobs:
     - name: Run Tests
       working-directory: ./backend
       run: |
-        dotnet test --logger 'junit;LogFileName=TestResults.xml' \
+        dotnet test --logger 'trx;LogFileName=TestResults.trx' \
         --verbosity normal --results-directory ./_test-results
     
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: ./backend/_test-results/*.xml
+        files: ./backend/_test-results/TestResults.trx
