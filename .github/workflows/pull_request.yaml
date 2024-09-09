@@ -1,16 +1,20 @@
 name: Pull Request
 
+permissions:
+  checks: write
+  pull-requests: write
+
 on: 
   pull_request:
 
 jobs:
-  Run Tests:
+  Backend-Test-And-Build:
     runs-on: ubuntu-latest
     
     steps:
     - uses: actions/checkout@v4
       
-    - name: Setup .NET Core
+    - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: '8.x'
@@ -18,11 +22,15 @@ jobs:
     - name: Run Tests
       working-directory: ./backend
       run: |
-        dotnet test --logger 'junit;LogFileName=TestResults.xml' \
+        dotnet test --logger 'trx;LogFileName=TestResults.trx' \
         --verbosity normal --results-directory ./_test-results
+    
+    - name: Build Application # Is the application buildable
+      working-directory: ./backend
+      run: dotnet build api
     
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
-        junit_files: ./backend/_test-results/*.xml
+        files: ./backend/_test-results/TestResults.trx
