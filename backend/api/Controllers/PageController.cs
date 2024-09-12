@@ -24,7 +24,7 @@ public class PageController : ControllerBase
     public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q,
         [FromQuery] string? language = "en")
     {
-        var pageResults = (List<Page>)await _pageRepository.GetByContent(q, language);
+        var pageResults = await _pageRepository.GetByContent(q, language);
 
         if (pageResults.Count == 0)
         {

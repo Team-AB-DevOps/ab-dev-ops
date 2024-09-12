@@ -4,5 +4,5 @@ namespace api.Abstractions;
 
 public interface IPageRepository
 {
-    Task<IEnumerable<Page?>> GetByContent(string? q, string? language);
+    Task<List<Page>> GetByContent(string? q, string? language);
 }

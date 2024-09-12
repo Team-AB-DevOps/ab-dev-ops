@@ -14,7 +14,7 @@ public class PageRepository : IPageRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public async Task<IEnumerable<Page?>> GetByContent(string? q, string? language)
+    public async Task<List<Page>> GetByContent(string? q, string? language)
     {
         if (!string.IsNullOrWhiteSpace(q))
         {
@@ -23,6 +23,6 @@ public class PageRepository : IPageRepository
                 .ToListAsync();
         }
 
-        return new List<Page?>();
+        return new List<Page>();
     }
 }
