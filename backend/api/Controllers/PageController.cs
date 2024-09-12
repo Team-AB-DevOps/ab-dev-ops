@@ -9,13 +9,11 @@ namespace api.Controllers;
 [ApiController]
 public class PageController : ControllerBase
 {
-    private readonly IMapper _mapper;
     private readonly IPageRepository _pageRepository;
 
-    public PageController(IPageRepository pageRepository, IMapper mapper)
+    public PageController(IPageRepository pageRepository)
     {
         _pageRepository = pageRepository;
-        _mapper = mapper;
     }
 
 
@@ -32,7 +30,7 @@ public class PageController : ControllerBase
         }
 
         var pageResultsDto = pageResults
-            .Select(page => _mapper.Map<PageResponseDto>(page))
+            .Select(page => new PageResponseDto(page.Title, page.Url, page.Language, page.Content))
             .ToList();
 
         return Ok(pageResultsDto);
