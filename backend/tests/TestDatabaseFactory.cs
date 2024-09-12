@@ -63,7 +63,7 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
                     Title = "JavaScript",
                     Url = "https://example.com/page1",
                     Language = "en",
-                    Content = "This is the content for JavaScript",
+                    Content = "This is the content for Javascript",
                     LastUpdated = DateTime.UtcNow
                 },
                 new Page
@@ -71,7 +71,7 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
                     Title = "TypeScript",
                     Url = "https://example.com/page2",
                     Language = "en",
-                    Content = "This is the content for TypeScript",
+                    Content = "This is the content for Typescript",
                     LastUpdated = DateTime.UtcNow
                 },
                 new Page
