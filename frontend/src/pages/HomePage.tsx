@@ -1,9 +1,10 @@
-import { SkeletonCard } from "@/components/core/SkeletonCard.tsx";
-import SkeletonLine from "@/components/core/SkeletonLine.tsx";
 import { useEffect } from "react";
 import StudentsEndpoint from "@/services/StudentsEndpoint.ts";
+import { SearchInput } from "@/components/core/Input";
 
 export default function HomePage() {
+
+
 	useEffect(() => {
 		StudentsEndpoint.getStudents()
 			.then((students) => {
@@ -16,7 +17,10 @@ export default function HomePage() {
 
 	return (
 		<>
-			<h2>Home</h2>
+			
+			<div className="flex justify-center items-center">
+				<SearchInput className="w-64" value="hello" />
+			</div>
 		</>
 	);
 }
