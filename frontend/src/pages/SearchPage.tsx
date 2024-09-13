@@ -45,8 +45,8 @@ export default function SearchPage() {
 			<div className="flex flex-col gap-5 mt-10">
 				<div className="flex flex-col gap-3 mt-5">
 					{pages.map((p) => (
-						<div className="inline-block">
-							<a key={p.title} href={p.url} className="text-blue-500 font-semibold underline">
+						<div key={p.title} className="inline-block">
+							<a href={p.url} className="text-blue-500 font-semibold underline">
 								{p.title}
 							</a>
 						</div>

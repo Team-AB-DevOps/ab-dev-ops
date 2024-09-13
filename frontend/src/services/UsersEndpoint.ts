@@ -16,9 +16,10 @@ class UsersEndpoint {
 	}
 
     static async Login(user: TLoginRequest): Promise<IUser> {
-        const resp = await new ApiClient().Post<IUser, TLoginRequest>(`api/login`, user);
-
+		const resp = await new ApiClient().Post<IUser, TLoginRequest>(`api/login`, user);
+		
 		if (!resp.ok) {
+			console.log("ERROR");
 			throw new Error(resp.error);
 		}
 

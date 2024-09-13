@@ -2,12 +2,16 @@ import IUser from "@/models/User";
 import React from "react";
 import AuthContext, { AuthContextInterface } from "./AuthContext";
 import UsersEndpoint from "@/services/UsersEndpoint";
+import { useNavigate } from "react-router-dom";
 
 interface AuthProps extends React.PropsWithChildren {}
 
 function AuthProvidor(props: AuthProps) {
 	const [user, setUser] = React.useState<IUser>();
 	const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+	const navigate = useNavigate();
+
+	const didInitialise = React.useRef(false);
 
 	const logout = React.useCallback((): void => {
 		_clearCache();
@@ -16,28 +20,49 @@ function AuthProvidor(props: AuthProps) {
 		console.log("logout completed");
 	}, []);
 
-	const login = React.useCallback((credentials: { username: string; password: string }) => {
+	const login = React.useCallback(async (credentials: { username: string; password: string }) => {
 		try {
-            UsersEndpoint.Login(credentials).then((r) => {
-                //TODO: Gem access token.
-                _setCache("ACCESS_TOKEN", "Min acces token");
-                setUser({ username: r.username, email: r.email })
-                setIsAuthenticated(true);
+			await UsersEndpoint.Login(credentials).then((r) => {
+				//TODO: Gem access token.
+				_setCache("ACCESS_TOKEN", "Min acces token");
+				setUser({ username: r.username, email: r.email });
+				setIsAuthenticated(true);
 			});
 		} catch (error) {
-			throw new Error("Wrong username and/or password");
+			throw new Error("Username and/or password incorrect.");
 		}
-    }, []);
-    
-    const getAccessToken = React.useCallback(async (): Promise<string> => {
-        const cachedToken = _getCache("ACCESS_TOKEN");
+	}, []);
 
-        if (!cachedToken) {
-            throw new Error("ACCESS_TOKEN is not set");
-        }
+	const getAccessToken = React.useCallback(async (): Promise<string> => {
+		const cachedToken = _getCache("ACCESS_TOKEN");
 
-        return cachedToken;
-    }, []);
+		if (!cachedToken) {
+			throw new Error("ACCESS_TOKEN is not set");
+		}
+
+		return cachedToken;
+	}, []);
+
+	React.useEffect(() => {
+		if (didInitialise.current) {
+			return;
+		}
+		didInitialise.current = true;
+		(async (): Promise<void> => {
+			try {
+				//TODO: Hent token gemt i localstorage.
+				const token = _getCache("ACCESS_TOKEN");
+				//TODO: Tag fat i dens payload, som gemmer email og username.
+				//TODO: SetUser til disse.
+				// const { email, username } = token.idToken.payload;
+				//setUser({email, username});
+				//setIsAuthenticated(true);
+				//navigate("/");
+			} catch (err) {
+				console.error(err);
+			}
+		})();
+	}, [props, user, logout]);
 
 	const contextValue = React.useMemo<AuthContextInterface>(() => {
 		return {

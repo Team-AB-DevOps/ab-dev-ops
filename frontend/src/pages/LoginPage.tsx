@@ -1,7 +1,6 @@
 import useAuth from "@/auth/UseAuth";
 import Button from "@/components/core/Button";
 import { TextInput } from "@/components/core/Input";
-import UsersEndpoint from "@/services/UsersEndpoint";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -22,16 +21,12 @@ function LoginPage() {
 		setLoginForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = () => {
-		// UsersEndpoint.Login({...loginForm})
-		// 	.then(() => navigate("/", {state: {redirected: true}}))
-        // 	.catch((e: Error) => setErrorMessage("Wrong username and/or password"));
+	const handleSubmit = async () => {
         try {
-			console.log(auth.isAuthenticated);
-            auth.login({ ...loginForm });
+			await auth.login({ ...loginForm });
 			navigate("/", { state: { redirected: true } });
         } catch (error) {
-            console.log(error);
+			setErrorMessage((error as Error).message);
         }
 	};
 
@@ -39,7 +34,7 @@ function LoginPage() {
 		<>
 			<div>
 				{redirected && <div className="bg-teal-300 p-1 border text-sm mb-5">You Were successfully registered and can login now</div>}
-				<h3 className="text-xl font-bold mb-3">Log In</h3>
+				<h3 className="text-xl font-bold mb-3 text-center">Log In</h3>
 				<div className="flex flex-col items-center gap-4">
 					<div className="flex flex-col">
 						<TextInput required name="username" value={loginForm.username} onChange={handleChange} label="Username:" />

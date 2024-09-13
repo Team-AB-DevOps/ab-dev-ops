@@ -43,7 +43,7 @@ function RegisterPage() {
 	return (
 		<>
 			<div>
-				<h3 className="text-xl font-bold mb-3">Sign Up</h3>
+				<h3 className="text-xl font-bold mb-3 text-center">Sign Up</h3>
 				<div className="flex flex-col items-center gap-4">
 					<div className="flex flex-col">
 						<TextInput required name="username" value={registerForm.username} onChange={handleChange} label="Username:" />
