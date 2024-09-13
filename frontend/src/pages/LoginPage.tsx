@@ -10,7 +10,7 @@ const INIT_FORM = {
 };
 
 function LoginPage() {
-	const { registered } = useLocation().state || false;
+	const { redirected } = useLocation().state || false;
     const [loginForm, setLoginForm] = React.useState(INIT_FORM);
     const [errorMessage, setErrorMessage] = React.useState("");
 	const navigate = useNavigate();
@@ -22,14 +22,14 @@ function LoginPage() {
 
 	const handleSubmit = () => {
 		UsersEndpoint.Login({...loginForm})
-			.then(() => navigate("/"))
+			.then(() => navigate("/", {state: {redirected: true}}))
 			.catch((e: Error) => setErrorMessage("Wrong username and/or password"));
 	};
 
 	return (
 		<>
 			<div>
-				{registered && <div className="bg-teal-300 p-1 border text-sm mb-5">You Were successfully registered and can login now</div>}
+				{redirected && <div className="bg-teal-300 p-1 border text-sm mb-5">You Were successfully registered and can login now</div>}
 				<h3 className="text-xl font-bold mb-3">Log In</h3>
 				<div className="flex flex-col items-center gap-4">
 					<div className="flex flex-col">

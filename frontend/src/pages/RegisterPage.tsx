@@ -36,7 +36,7 @@ function RegisterPage() {
 		const body = { username, email, password };
 
 		UsersEndpoint.Register(body)
-			.then(() => navigate("/login", { state: { registered: true } }))
+			.then(() => navigate("/login", { state: { redirected: true } }))
 			.catch((e: Error) => console.log("Could not register"));
 	};
 

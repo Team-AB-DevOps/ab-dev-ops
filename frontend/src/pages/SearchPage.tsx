@@ -3,9 +3,10 @@ import { SearchInput } from "@/components/core/Input";
 import Button from "@/components/core/Button";
 import PagesEndpoint from "@/services/PagesEndpoint";
 import IPage from "@/models/Page";
-import { useSearchParams } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 
 export default function SearchPage() {
+	const { redirected } = useLocation().state || false;
 	const [searchParams] = useSearchParams();
 	const [searchValue, setSearchValue] = React.useState(searchParams.get("q") ?? "");
 	const [pages, setPages] = React.useState<IPage[]>([]);
@@ -35,6 +36,7 @@ export default function SearchPage() {
 
 	return (
 		<>
+			{redirected && <div className="bg-teal-300 p-1 border text-sm mb-5">You were logged in</div>}
 			<div className="flex gap-2 justify-center items-center">
 				<SearchInput onKeyDown={handleKeyDown} className="w-52" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 				<Button onClick={handleFetch}>Search</Button>
