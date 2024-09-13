@@ -1,3 +1,4 @@
+import useAuth from "@/auth/UseAuth";
 import Button from "@/components/core/Button";
 import { TextInput } from "@/components/core/Input";
 import UsersEndpoint from "@/services/UsersEndpoint";
@@ -13,7 +14,8 @@ function LoginPage() {
 	const { redirected } = useLocation().state || false;
     const [loginForm, setLoginForm] = React.useState(INIT_FORM);
     const [errorMessage, setErrorMessage] = React.useState("");
-	const navigate = useNavigate();
+    const navigate = useNavigate();
+    const auth = useAuth();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -21,9 +23,16 @@ function LoginPage() {
 	};
 
 	const handleSubmit = () => {
-		UsersEndpoint.Login({...loginForm})
-			.then(() => navigate("/", {state: {redirected: true}}))
-			.catch((e: Error) => setErrorMessage("Wrong username and/or password"));
+		// UsersEndpoint.Login({...loginForm})
+		// 	.then(() => navigate("/", {state: {redirected: true}}))
+        // 	.catch((e: Error) => setErrorMessage("Wrong username and/or password"));
+        try {
+			console.log(auth.isAuthenticated);
+            auth.login({ ...loginForm });
+			navigate("/", { state: { redirected: true } });
+        } catch (error) {
+            console.log(error);
+        }
 	};
 
 	return (
