@@ -5,7 +5,7 @@ import ApiClient from "./ApiClient";
 class PagesEndpoint {
 
 	static async getPages(searchValue: string, language: string = "en"): Promise<IPage[]> {
-		const resp = await new ApiClient().Get<IPage[]>("api/search");
+		const resp = await new ApiClient().Get<IPage[]>("api/search", {q: searchValue, language});
 
 		if (!resp.ok) {
 			throw new Error(resp.error);
