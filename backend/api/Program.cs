@@ -8,6 +8,23 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
+// CORS Settings
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://example.com",
+                    "http://localhost:5173",
+                    "http://localhost:5174"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -20,6 +37,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 
 // Hvis "Test"-Enviornment, så andvend in memory sqlite db
@@ -59,6 +77,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Apply CORS settings
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthorization();
 
