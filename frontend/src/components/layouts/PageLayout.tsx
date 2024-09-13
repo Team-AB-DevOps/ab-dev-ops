@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import NavBar from "@/components/layouts/NavBar.tsx";
 import Header from "@/components/layouts/Header.tsx";
 import Footer from "./Footer";
 

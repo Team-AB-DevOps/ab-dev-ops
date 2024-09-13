@@ -1,7 +1,6 @@
 import Button from "@/components/core/Button";
 import { TextInput } from "@/components/core/Input";
 import UsersEndpoint from "@/services/UsersEndpoint";
-import { Divide } from "lucide-react";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
