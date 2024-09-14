@@ -42,13 +42,15 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
             var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? "test_audience";
 
             // Add in-memory configuration
-            config.AddInMemoryCollection(new Dictionary<string, string>
+            config.AddInMemoryCollection(new Dictionary<string, string?>
             {
                 { "JWT_KEY", jwtKey },
                 { "Jwt:Issuer", jwtIssuer },
                 { "Jwt:Audience", jwtAudience }
             });
         });
+        
+        
 
         builder.ConfigureServices(services =>
         {
