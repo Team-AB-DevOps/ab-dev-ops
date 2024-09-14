@@ -1,14 +1,29 @@
+using System.Text;
 using api.Abstractions;
 using api.Data;
 using api.Repositories;
 using api.Services;
 using DotNetEnv;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+// Try to load .env file if it exists for local development
+var envFile = ".env";
+if (File.Exists(envFile))
+{
+    Env.Load(envFile);
+}
+
 builder.Configuration.AddEnvironmentVariables();
+
+var jwtKey = builder.Configuration["JWT_KEY"] ?? "fallback_test_jwt_key";
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
+}
 
 // CORS Settings
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -28,6 +43,7 @@ builder.Services.AddCors(options =>
 
 // Add services to the container.
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
+builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPageRepository, PageRepository>();
 
@@ -36,8 +52,25 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+    };
+});
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 
 // Hvis "Test"-Enviornment, så andvend in memory sqlite db
@@ -69,6 +102,7 @@ else
 
 var app = builder.Build();
 
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -80,6 +114,8 @@ app.UseHttpsRedirection();
 
 // Apply CORS settings
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -96,4 +132,7 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 app.Run();
-public partial class Program { }
+
+public partial class Program
+{
+}

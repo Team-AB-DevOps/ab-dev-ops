@@ -1,9 +1,11 @@
 ﻿using api.Data;
 using api.Models.Entities;
+using DotNetEnv;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace tests;
@@ -21,6 +23,34 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test"); // Set environment to "Test"
+        
+        builder.ConfigureAppConfiguration((context, config) =>
+        {
+            // Try to load .env file if it exists
+            var envFile = "../api/.env";
+            if (File.Exists(envFile))
+            {
+                DotNetEnv.Env.Load(envFile);
+            }
+
+            // Add environment variables to configuration
+            config.AddEnvironmentVariables();
+
+            // Get JWT settings from environment variables or use fallback values
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "fallback_test_jwt_key";
+            var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? "test_issuer";
+            var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? "test_audience";
+
+            // Add in-memory configuration
+            config.AddInMemoryCollection(new Dictionary<string, string?>
+            {
+                { "JWT_KEY", jwtKey },
+                { "Jwt:Issuer", jwtIssuer },
+                { "Jwt:Audience", jwtAudience }
+            });
+        });
+        
+        
 
         builder.ConfigureServices(services =>
         {
