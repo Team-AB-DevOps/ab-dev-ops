@@ -15,7 +15,7 @@ public class JwtGenerator : IJwtGenerator
     public JwtGenerator(IConfiguration configuration)
     {
         _configuration = configuration;
-        _jwtKey =  Environment.GetEnvironmentVariable("JWT_KEY");
+        _jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
     }
 
     public string GenerateToken(User user)
@@ -25,8 +25,8 @@ public class JwtGenerator : IJwtGenerator
             new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new Claim("userId", user.Id.ToString()),
-            new Claim("Username", user.Username),
-            new Claim("Email", user.Email)
+            new Claim("username", user.Username),
+            new Claim("email", user.Email)
         };
 
         // TODO: Save Jwt key somewhere more secure
