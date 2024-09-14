@@ -145,5 +145,6 @@ public class UserTests
         var response = Assert.IsType<TokenUserResponseDto>(createdResult.Value);
         Assert.Equal(requestDto.Username, response.User.Username);
         Assert.Equal(userInDb.Email, response.User.Email);
+        Assert.NotNull(response.Token);
     }
 }
