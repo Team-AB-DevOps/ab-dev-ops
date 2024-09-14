@@ -49,7 +49,6 @@ function AuthProvidor(props: AuthProps) {
 		didInitialise.current = true;
 		(async (): Promise<void> => {
 			try {
-				//TODO: Hent token gemt i localstorage.
 				const token = _getCache("ACCESS_TOKEN");
 
 				if (!token) {
