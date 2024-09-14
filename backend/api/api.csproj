@@ -32,4 +32,8 @@
         <InternalsVisibleTo Include="tests"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Include="..\api\.env" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+
 </Project>

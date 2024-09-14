@@ -13,7 +13,12 @@ var builder = WebApplication.CreateBuilder(args);
 Env.Load();
 builder.Configuration.AddEnvironmentVariables();
 
-var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+var jwtKey = builder.Configuration["JWT_KEY"];
+
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
+}
 
 // CORS Settings
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
