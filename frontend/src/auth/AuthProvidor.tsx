@@ -22,10 +22,9 @@ function AuthProvidor(props: AuthProps) {
 
 	const login = React.useCallback(async (credentials: { username: string; password: string }) => {
 		try {
-			await UsersEndpoint.Login(credentials).then((r) => {
-				//TODO: Gem access token.
-				_setCache("ACCESS_TOKEN", "Min acces token");
-				setUser({ username: r.username, email: r.email });
+			await UsersEndpoint.Login(credentials).then(({user, token}) => {
+				_setCache("ACCESS_TOKEN", token);
+				setUser(user);
 				setIsAuthenticated(true);
 			});
 		} catch (error) {
@@ -50,19 +49,23 @@ function AuthProvidor(props: AuthProps) {
 		didInitialise.current = true;
 		(async (): Promise<void> => {
 			try {
-				//TODO: Hent token gemt i localstorage.
 				const token = _getCache("ACCESS_TOKEN");
-				//TODO: Tag fat i dens payload, som gemmer email og username.
-				//TODO: SetUser til disse.
-				// const { email, username } = token.idToken.payload;
-				//setUser({email, username});
-				//setIsAuthenticated(true);
-				//navigate("/");
+
+				if (!token) {
+					return;
+				}
+
+				const payload = token!.split(".")[1];
+				const { username, email } = JSON.parse(atob(payload));
+
+				setUser({ email, username });
+				setIsAuthenticated(true);
+				navigate("/");
 			} catch (err) {
 				console.error(err);
 			}
 		})();
-	}, [props, user, logout]);
+	}, [props, user, logout, navigate]);
 
 	const contextValue = React.useMemo<AuthContextInterface>(() => {
 		return {

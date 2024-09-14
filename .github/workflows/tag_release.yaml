@@ -22,7 +22,7 @@ jobs:
         with:
           context: ./frontend # Location of Dockerfile
           push: true # Push to Docker Hub
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/devops-frontend:${{ github.ref_name }} # Tags image with github tag from repo
+          tags: alihmohammad/devops-frontend:${{ github.ref_name }} # Tags image with github tag from repo
 
             
   deploy-containers:
