@@ -53,7 +53,7 @@ builder.Services.AddAuthentication(options =>
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+    options.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuer = true,
         ValidateAudience = true,
@@ -66,7 +66,6 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
 
 // Hvis "Test"-Enviornment, så andvend in memory sqlite db
@@ -98,7 +97,6 @@ else
 
 var app = builder.Build();
 
-app.UseAuthentication();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -111,6 +109,8 @@ app.UseHttpsRedirection();
 
 // Apply CORS settings
 app.UseCors(MyAllowSpecificOrigins);
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
@@ -127,4 +127,7 @@ if (!app.Environment.IsEnvironment("Test"))
 }
 
 app.Run();
-public partial class Program { }
+
+public partial class Program
+{
+}
