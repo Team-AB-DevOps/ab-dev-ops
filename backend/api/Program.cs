@@ -8,6 +8,23 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 Env.Load();
+builder.Configuration.AddEnvironmentVariables();
+
+// CORS Settings
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+        policy =>
+        {
+            policy.WithOrigins("http://example.com",
+                    "http://localhost:5173",
+                    "http://localhost:5174"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 
 // Add services to the container.
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
@@ -21,24 +38,34 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-// DB CONNECTION
-var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-if (string.IsNullOrEmpty(connectionString))
+
+
+// Hvis "Test"-Enviornment, så andvend in memory sqlite db
+if (builder.Environment.EnvironmentName == "Test")
 {
-    throw new Exception(
-        "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+    builder.Services.AddDbContext<DataContext>(options =>
+        options.UseSqlite("DataSource=:memory:"));
 }
-
-var serverVersion = ServerVersion.AutoDetect(connectionString);
-
-
-builder.Services.AddDbContext<DataContext>(options =>
+else
 {
-    options.UseMySql(connectionString, serverVersion)
-        .LogTo(Console.WriteLine, LogLevel.Information)
-        .EnableSensitiveDataLogging()
-        .EnableDetailedErrors();
-});
+    // MySQL for dev og prod
+    var connectionString = builder.Configuration.GetValue<string>("ConnectionString");
+    if (string.IsNullOrEmpty(connectionString))
+    {
+        throw new Exception(
+            "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+    }
+
+    var serverVersion = ServerVersion.AutoDetect(connectionString);
+
+    builder.Services.AddDbContext<DataContext>(options =>
+    {
+        options.UseMySql(connectionString, serverVersion)
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
+    });
+}
 
 var app = builder.Build();
 
@@ -51,15 +78,22 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+// Apply CORS settings
+app.UseCors(MyAllowSpecificOrigins);
+
 app.UseAuthorization();
 
 app.MapControllers();
 
 
-// Apply migrations
-using var scope = app.Services.CreateScope();
-await using var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-await dbContext.Database.EnsureDeletedAsync();
-await dbContext.Database.MigrateAsync();
+// Apply migrations only if not in the "Test" environment
+if (!app.Environment.IsEnvironment("Test"))
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    await dbContext.Database.EnsureDeletedAsync();
+    await dbContext.Database.MigrateAsync();
+}
 
 app.Run();
+public partial class Program { }
