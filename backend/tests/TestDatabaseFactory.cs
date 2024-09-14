@@ -26,25 +26,28 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
         
         builder.ConfigureAppConfiguration((context, config) =>
         {
-            // Load .env file
-            Env.Load();
-
-            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
-            if (string.IsNullOrEmpty(jwtKey))
+            // Try to load .env file if it exists
+            var envFile = "../api/.env";
+            if (File.Exists(envFile))
             {
-                jwtKey = "fallback_test_jwt_key_for_development";
+                DotNetEnv.Env.Load(envFile);
             }
+
+            // Add environment variables to configuration
+            config.AddEnvironmentVariables();
+
+            // Get JWT settings from environment variables or use fallback values
+            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "fallback_test_jwt_key";
+            var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? "test_issuer";
+            var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? "test_audience";
 
             // Add in-memory configuration
             config.AddInMemoryCollection(new Dictionary<string, string>
             {
                 { "JWT_KEY", jwtKey },
-                { "Jwt:Issuer", "test_issuer" },
-                { "Jwt:Audience", "test_audience" }
+                { "Jwt:Issuer", jwtIssuer },
+                { "Jwt:Audience", jwtAudience }
             });
-
-            // Add environment variables to configuration
-            config.AddEnvironmentVariables();
         });
 
         builder.ConfigureServices(services =>

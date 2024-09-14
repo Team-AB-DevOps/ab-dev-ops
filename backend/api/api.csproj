@@ -33,7 +33,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\api\.env" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="..\api\.env" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\api\.env')" />
     </ItemGroup>
 
 </Project>

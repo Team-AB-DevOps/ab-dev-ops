@@ -10,11 +10,16 @@ using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
-Env.Load();
+// Try to load .env file if it exists for local development
+var envFile = ".env";
+if (File.Exists(envFile))
+{
+    Env.Load(envFile);
+}
+
 builder.Configuration.AddEnvironmentVariables();
 
 var jwtKey = builder.Configuration["JWT_KEY"];
-
 if (string.IsNullOrEmpty(jwtKey))
 {
     throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
