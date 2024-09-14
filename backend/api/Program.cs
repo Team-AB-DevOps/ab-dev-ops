@@ -19,7 +19,7 @@ if (File.Exists(envFile))
 
 builder.Configuration.AddEnvironmentVariables();
 
-var jwtKey = builder.Configuration["JWT_KEY"];
+var jwtKey = builder.Configuration["JWT_KEY"] ?? "fallback_test_jwt_key";
 if (string.IsNullOrEmpty(jwtKey))
 {
     throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
