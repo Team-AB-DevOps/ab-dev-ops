@@ -8,7 +8,7 @@ on:
   pull_request:
 
 jobs:
-  Backend-Test-And-Build:
+  test-backend:
     runs-on: ubuntu-latest
     
     steps:
@@ -25,12 +25,12 @@ jobs:
         dotnet test --logger 'trx;LogFileName=TestResults.trx' \
         --verbosity normal --results-directory ./_test-results
     
-    - name: Build Application # Is the application buildable
-      working-directory: ./backend
-      run: dotnet build api
-    
     - name: Publish Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
         files: ./backend/_test-results/TestResults.trx
+
+    - name: Build Application # Is the application buildable
+      working-directory: ./backend
+      run: dotnet build api
