@@ -10,10 +10,12 @@ namespace api.Services;
 public class JwtGenerator : IJwtGenerator
 {
     private readonly IConfiguration _configuration;
+    private readonly string _jwtKey;
 
     public JwtGenerator(IConfiguration configuration)
     {
         _configuration = configuration;
+        _jwtKey =  Environment.GetEnvironmentVariable("JWT_KEY");
     }
 
     public string GenerateToken(User user)
@@ -28,7 +30,7 @@ public class JwtGenerator : IJwtGenerator
         };
 
         // TODO: Save Jwt key somewhere more secure
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
         var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
             _configuration["Jwt:Issuer"],
