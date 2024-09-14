@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using api.Models.Entities;
+using DotNetEnv;
 
 
 namespace tests;
@@ -12,6 +13,19 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
     public PageTests(TestDatabaseFactory factory)
     {
         _factory = factory;
+        
+        // Define the path to the .env file in the "api" project
+        var apiProjectPath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory()).Parent.Parent.FullName,
+            "..", "api", ".env");
+
+        if (File.Exists(apiProjectPath))
+        {
+            Env.Load(apiProjectPath); // Load .env file explicitly
+        }
+        else
+        {
+            throw new FileNotFoundException(".env file not found at " + apiProjectPath);
+        }
     }
     
     [Fact]
