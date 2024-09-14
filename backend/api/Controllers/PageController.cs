@@ -2,6 +2,7 @@
 using api.Models.DTOs;
 using api.Models.Entities;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -16,7 +17,7 @@ public class PageController : ControllerBase
         _pageRepository = pageRepository;
     }
 
-
+    [Authorize]
     [Route("/api/search")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q,

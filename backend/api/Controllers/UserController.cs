@@ -53,7 +53,7 @@ public class UserController : ControllerBase
 
     [Route("/api/login")]
     [HttpPost]
-    public async Task<ActionResult<UserResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
+    public async Task<ActionResult<TokenUserResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
     {
         const string errorMsg = "Username and/or password is wrong";
         var userInDb = await _userRepository.GetByUsername(loginRequest.Username);
@@ -76,6 +76,7 @@ public class UserController : ControllerBase
             new Claim("Email", userInDb.Email),
         };
 
+        // TODO: Save Jwt key somewhere more secure
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
         var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
         var token = new JwtSecurityToken(
@@ -89,11 +90,9 @@ public class UserController : ControllerBase
         var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
 
         var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
-        
-        return Ok(new { Token = tokenValue, User = userDto});
-        
-        // TODO: Change userDto?
 
-        return Ok(userDto);
+        var response = new TokenUserResponseDto(tokenValue, userDto);
+        
+        return Ok(response);
     }
 }
