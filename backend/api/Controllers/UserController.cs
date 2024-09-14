@@ -1,25 +1,22 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using api.Abstractions;
+﻿using api.Abstractions;
 using api.Models.DTOs;
 using api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 
 namespace api.Controllers;
+
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IJwtGenerator _jwtGenerator;
     private readonly IPasswordHasher _passwordHasher;
-    private readonly IConfiguration _configuration;
-    
-    public UserController(IUserRepository userRepository, IPasswordHasher passwordHasher, IConfiguration configuration)
+    private readonly IUserRepository _userRepository;
+
+    public UserController(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtGenerator jwtGenerator)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
-        _configuration = configuration;
+        _jwtGenerator = jwtGenerator;
     }
 
     [Route("/api/register")]
@@ -30,15 +27,19 @@ public class UserController : ControllerBase
         var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 
         if (existingUsername != null)
+        {
             return BadRequest("Username is already taken");
+        }
 
         if (existingMail != null)
+        {
             return BadRequest("Email already taken");
-        
-        
+        }
+
+
         var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
 
-        var newUser = new User()
+        var newUser = new User
         {
             Username = registerRequest.Username,
             Email = registerRequest.Email,
@@ -47,7 +48,7 @@ public class UserController : ControllerBase
 
         await _userRepository.CreateUser(newUser);
         var userDto = new UserResponseDto(newUser.Username, newUser.Email);
-        
+
         return CreatedAtAction(nameof(Login), userDto);
     }
 
@@ -59,40 +60,24 @@ public class UserController : ControllerBase
         var userInDb = await _userRepository.GetByUsername(loginRequest.Username);
 
         if (userInDb == null)
+        {
             return BadRequest(errorMsg);
+        }
 
-        bool matchingPassword = _passwordHasher.Verify(userInDb.Password, loginRequest.Password);
+        var matchingPassword = _passwordHasher.Verify(userInDb.Password, loginRequest.Password);
 
         if (!matchingPassword)
-            return BadRequest(errorMsg);
-        
-        // Jwt claims
-        var claims = new[]
         {
-            new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim("userId", userInDb.Id.ToString()),
-            new Claim("Username", userInDb.Username),
-            new Claim("Email", userInDb.Email),
-        };
+            return BadRequest(errorMsg);
+        }
 
-        // TODO: Save Jwt key somewhere more secure
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
-        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-        var token = new JwtSecurityToken(
-            _configuration["Jwt:Issuer"],
-            _configuration["Jwt:Audience"],
-            claims,
-            expires: DateTime.UtcNow.AddMinutes(60),
-            signingCredentials: signIn
-            );
 
-        var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+        var token = _jwtGenerator.GenerateToken(userInDb);
 
         var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
 
-        var response = new TokenUserResponseDto(tokenValue, userDto);
-        
+        var response = new TokenUserResponseDto(token, userDto);
+
         return Ok(response);
     }
 }

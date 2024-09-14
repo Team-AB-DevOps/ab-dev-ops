@@ -14,14 +14,16 @@ public class UserTests
     private readonly UserController _userController;
     private readonly IUserRepository _userRepositoryMock;
     private readonly IPasswordHasher _passwordHasherMock;
+    private readonly IJwtGenerator _jwtGenerator;
 
     public UserTests()
     {
         // Mocks:
         _passwordHasherMock = Substitute.For<IPasswordHasher>();
         _userRepositoryMock = Substitute.For<IUserRepository>();
+        _jwtGenerator = Substitute.For<IJwtGenerator>();
         
-        _userController = new UserController(_userRepositoryMock, _passwordHasherMock);
+        _userController = new UserController(_userRepositoryMock, _passwordHasherMock, _jwtGenerator);
     }
     
     [Fact]
