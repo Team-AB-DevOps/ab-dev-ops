@@ -1,7 +1,11 @@
-﻿using api.Abstractions;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using api.Abstractions;
 using api.Models.DTOs;
 using api.Models.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace api.Controllers;
 [ApiController]
@@ -9,11 +13,13 @@ public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
     private readonly IPasswordHasher _passwordHasher;
+    private readonly IConfiguration _configuration;
     
-    public UserController(IUserRepository userRepository, IPasswordHasher passwordHasher)
+    public UserController(IUserRepository userRepository, IPasswordHasher passwordHasher, IConfiguration configuration)
     {
         _userRepository = userRepository;
         _passwordHasher = passwordHasher;
+        _configuration = configuration;
     }
 
     [Route("/api/register")]
@@ -60,7 +66,33 @@ public class UserController : ControllerBase
         if (!matchingPassword)
             return BadRequest(errorMsg);
         
+        // Jwt claims
+        var claims = new[]
+        {
+            new Claim(JwtRegisteredClaimNames.Sub, _configuration["Jwt:Subject"]),
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim("userId", userInDb.Id.ToString()),
+            new Claim("Username", userInDb.Username),
+            new Claim("Email", userInDb.Email),
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+        var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var token = new JwtSecurityToken(
+            _configuration["Jwt:Issuer"],
+            _configuration["Jwt:Audience"],
+            claims,
+            expires: DateTime.UtcNow.AddMinutes(60),
+            signingCredentials: signIn
+            );
+
+        var tokenValue = new JwtSecurityTokenHandler().WriteToken(token);
+
         var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
+        
+        return Ok(new { Token = tokenValue, User = userDto});
+        
+        // TODO: Change userDto?
 
         return Ok(userDto);
     }
