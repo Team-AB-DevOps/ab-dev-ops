@@ -16,7 +16,7 @@ RUN npm i -g serve
 COPY . .
 
 # Set environment variable
-ENV VITE_API_BASE_URL="http://localhost:8081"
+ENV VITE_API_BASE_URL="http://40.127.181.51:8081"
 
 # Build the application
 RUN npm run build
