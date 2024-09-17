@@ -27,7 +27,7 @@ jobs:
             - name: Build and push backend image
               uses: docker/build-push-action@v6
               with:
-                  context: ./backend/api # Location of Dockerfile
+                  context: ./backend # Location of Dockerfile
                   push: true # Push to Docker Hub
                   tags: alihmohammad/devops-backend:${{ github.ref_name }} # Tags image with github tag from repo
 
