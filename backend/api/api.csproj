@@ -42,4 +42,13 @@
         </None>
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Migrations\20240906113240_sql-migration.cs" />
+      <Compile Remove="Migrations\20240906113240_sql-migration.Designer.cs" />
+      <Compile Remove="Migrations\20240917095630_new-seed-data.cs" />
+      <Compile Remove="Migrations\20240917095630_new-seed-data.Designer.cs" />
+      <Compile Remove="Migrations\20240917113850_new-sql-seed.cs" />
+      <Compile Remove="Migrations\20240917113850_new-sql-seed.Designer.cs" />
+    </ItemGroup>
+
 </Project>
