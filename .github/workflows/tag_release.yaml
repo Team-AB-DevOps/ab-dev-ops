@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+    branches: main
       
 jobs:
   push-images:
@@ -58,7 +59,6 @@ jobs:
             sudo docker image prune --all --force
 
             echo "Insert variables for building containers"
-
             echo "TAG=$TAG_NAME" > .env
             
             echo "Build containers"
