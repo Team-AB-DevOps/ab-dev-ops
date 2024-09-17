@@ -10,10 +10,11 @@ namespace api.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            var sqlStatements = File.ReadAllText("./Sql/data.sql");
-            if (sqlStatements == "" || sqlStatements == null) throw new Exception("SQL statements not found");
-
-            migrationBuilder.Sql(sqlStatements);
+            // TODO: Find a better way to seed data?
+            // var sqlStatements = File.ReadAllText("./Sql/data.sql");
+            // if (sqlStatements == "" || sqlStatements == null) throw new Exception("SQL statements not found");
+            //
+            // migrationBuilder.Sql(sqlStatements);
         }
 
         /// <inheritdoc />

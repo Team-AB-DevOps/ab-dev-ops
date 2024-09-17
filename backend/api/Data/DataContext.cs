@@ -9,7 +9,7 @@ public class DataContext : DbContext
     {
     }
     // Alle modeller skrives her
-    
+
     public DbSet<User> Users { get; set; }
     public DbSet<Page> Pages { get; set; }
 }

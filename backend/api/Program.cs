@@ -46,6 +46,7 @@ builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPageRepository, PageRepository>();
+builder.Services.AddSingleton<DatabaseInitializer>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -129,9 +130,15 @@ if (!app.Environment.IsEnvironment("Test"))
     var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     await dbContext.Database.EnsureDeletedAsync();
     await dbContext.Database.MigrateAsync();
+
+// Call the database initializer at startup
+    var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+    var sqlFilePath = Path.Combine(app.Environment.ContentRootPath, "Sql", "data.sql");
+    initializer.InitializeDatabase(sqlFilePath);
 }
 
 app.Run();
+
 
 public partial class Program
 {

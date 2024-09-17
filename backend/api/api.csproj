@@ -10,10 +10,10 @@
     <ItemGroup>
         <PackageReference Include="AutoMapper" Version="13.0.1"/>
         <PackageReference Include="DotNetEnv" Version="3.1.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.8"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.8"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.8"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.8">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -33,7 +33,22 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\api\.env" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\api\.env')" />
+        <None Include="..\api\.env" CopyToOutputDirectory="PreserveNewest" Condition="Exists('..\api\.env')"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Update="Sql\data.sql">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20240906113240_sql-migration.cs" />
+      <Compile Remove="Migrations\20240906113240_sql-migration.Designer.cs" />
+      <Compile Remove="Migrations\20240917095630_new-seed-data.cs" />
+      <Compile Remove="Migrations\20240917095630_new-seed-data.Designer.cs" />
+      <Compile Remove="Migrations\20240917113850_new-sql-seed.cs" />
+      <Compile Remove="Migrations\20240917113850_new-sql-seed.Designer.cs" />
     </ItemGroup>
 
 </Project>
