@@ -1,4 +1,5 @@
-
+TRUNCATE TABLE users;
+TRUNCATE TABLE pages;
 
 INSERT INTO users (username, email, password) VALUES('admin','keamonk@stud.kea.dk','admin');
 INSERT INTO users (username, email, password) VALUES('ali','ali@live.dk','ali1234');

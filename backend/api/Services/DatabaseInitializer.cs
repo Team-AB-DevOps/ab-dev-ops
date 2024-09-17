@@ -8,7 +8,7 @@ public class DatabaseInitializer
 
     public DatabaseInitializer(IConfiguration configuration)
     {
-        _connectionString = configuration.GetConnectionString("ConnectionString");
+        _connectionString = configuration["ConnectionString"];
     }
 
     public void InitializeDatabase(string sqlFilePath)
