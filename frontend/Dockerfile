@@ -15,6 +15,9 @@ RUN npm i -g serve
 # Copy the remaining application files to the working directory
 COPY . .
 
+# Set environment variable
+ENV VITE_API_BASE_URL="http://localhost:8081"
+
 # Build the application
 RUN npm run build
 
