@@ -104,8 +104,6 @@ else
 var app = builder.Build();
 
 
-
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -132,18 +130,14 @@ if (!app.Environment.IsEnvironment("Test"))
     var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
     await dbContext.Database.EnsureDeletedAsync();
     await dbContext.Database.MigrateAsync();
-}
 
 // Call the database initializer at startup
-using (var scope = app.Services.CreateScope())
-{
     var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
     var sqlFilePath = Path.Combine(app.Environment.ContentRootPath, "Sql", "data.sql");
     initializer.InitializeDatabase(sqlFilePath);
 }
 
 app.Run();
-
 
 
 public partial class Program
