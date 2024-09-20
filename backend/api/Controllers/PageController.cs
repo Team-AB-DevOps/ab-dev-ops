@@ -16,8 +16,7 @@ public class PageController : ControllerBase
 
 	[Route("/api/search")]
 	[HttpGet]
-	public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q,
-		[FromQuery] string? language = "en")
+	public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q, [FromQuery] string? language = "en")
 	{
 		var pageResults = await _pageRepository.GetByContent(q, language);
 
@@ -26,9 +25,7 @@ public class PageController : ControllerBase
 			return Ok(new List<PageResponseDto>());
 		}
 
-		var pageResultsDto = pageResults
-			.Select(page => new PageResponseDto(page.Title, page.Url, page.Language, page.Content))
-			.ToList();
+		var pageResultsDto = pageResults.Select(page => new PageResponseDto(page.Title, page.Url, page.Language, page.Content)).ToList();
 
 		return Ok(pageResultsDto);
 	}
