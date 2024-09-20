@@ -29,25 +29,8 @@ public class UserTests
 	{
 		// Arrange
 		var userInDb = new User { Email = "Test2@gmail.com", Username = "Test Name" };
-		var requestDto = new RegisterRequestDto("Test Name", "Test@gmail.com", "TestPassword");
+		var requestDto = new RegisterRequestDto("Test Name", "TestPassword");
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(userInDb);
-		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
-
-		// Act
-		var result = await _userController.Register(requestDto);
-
-		// Assert
-		Assert.IsType<BadRequestObjectResult>(result.Result);
-	}
-
-	[Fact]
-	public async Task Register_Existing_Email_Should_Return_Bad_Request()
-	{
-		// Arrange
-		var userInDb = new User { Email = "Joe@gmail.com", Username = "Johan" };
-		var requestDto = new RegisterRequestDto("Jamal", "Joe@gmail.com", "TestPassword");
-		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(userInDb);
-		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(Task.FromResult<User?>(null));
 
 		// Act
 		var result = await _userController.Register(requestDto);
@@ -60,15 +43,13 @@ public class UserTests
 	public async Task Register_New_User_Should_Success()
 	{
 		// Arrange
-		var requestDto = new RegisterRequestDto("Julie", "Julie@gmail.com", "TestPassword");
+		var requestDto = new RegisterRequestDto("Julie", "TestPassword");
 		var hashedPassword = "hashed";
-		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(Task.FromResult<User?>(null));
 		_passwordHasherMock.Hash(requestDto.Password).Returns(hashedPassword);
 
 		var newUser = new User
 		{
-			Email = "Julie@gmail.com",
 			Username = "Julie",
 			Password = hashedPassword,
 		};
@@ -81,7 +62,7 @@ public class UserTests
 		var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
 		var response = Assert.IsType<UserResponseDto>(createdResult.Value);
 		Assert.Equal(newUser.Username, response.Username);
-		Assert.Equal(newUser.Email, response.Email);
+
 	}
 
 	[Fact]
@@ -127,7 +108,6 @@ public class UserTests
 		// Arrange
 		var userInDb = new User
 		{
-			Email = "James@gmail.com",
 			Username = "James",
 			Password = "CorrectPw",
 		};
@@ -145,7 +125,6 @@ public class UserTests
 		var createdResult = Assert.IsType<OkObjectResult>(result.Result);
 		var response = Assert.IsType<TokenUserResponseDto>(createdResult.Value);
 		Assert.Equal(requestDto.Username, response.User.Username);
-		Assert.Equal(userInDb.Email, response.User.Email);
 		Assert.NotNull(response.Token);
 	}
 }
