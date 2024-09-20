@@ -30,7 +30,7 @@ public class UserController : ControllerBase
 		{
 			return BadRequest("Username is already taken");
 		}
-		
+
 		if (existingMail != null)
 		{
 			return BadRequest("Email already taken");

@@ -1,7 +1,7 @@
 import IUser from "@/models/User";
 import ApiClient from "./ApiClient";
 
-type TRegisterRequest = { username: string; password: string };
+type TRegisterRequest = { username: string; email: string; password: string };
 type TLoginRequest = { username: string, password: string };
 
 export type LoginResponse = {user: IUser, token: string}
