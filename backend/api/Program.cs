@@ -44,6 +44,7 @@ builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPageRepository, PageRepository>();
 builder.Services.AddSingleton<DatabaseInitializer>();
+builder.Services.AddHttpClient<WeatherApi>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
