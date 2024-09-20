@@ -23,7 +23,6 @@ public class UserController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
 	{
-		var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
 		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 
 		if (existingUsername != null)
@@ -31,19 +30,9 @@ public class UserController : ControllerBase
 			return BadRequest("Username is already taken");
 		}
 
-		if (existingMail != null)
-		{
-			return BadRequest("Email already taken");
-		}
-
 		var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
 
-		var newUser = new User
-		{
-			Username = registerRequest.Username,
-			Email = registerRequest.Email,
-			Password = hashedPassword,
-		};
+		var newUser = new User { Username = registerRequest.Username, Password = hashedPassword, };
 
 		await _userRepository.CreateUser(newUser);
 		var userDto = new UserResponseDto(newUser.Username, newUser.Email);

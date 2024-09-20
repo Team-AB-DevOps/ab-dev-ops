@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 
 const INIT_FORM = {
 	username: "",
-	email: "",
 	password: "",
 	passwordRepeat: "",
 };
@@ -22,22 +21,19 @@ function RegisterPage() {
 	};
 
 	const handleSubmit = () => {
-		const { username, email, password, passwordRepeat } = registerForm;
+		const { username, password, passwordRepeat } = registerForm;
 
 		if (password !== passwordRepeat) {
 			setErrorMessage("Password is not matching.");
 			return;
 		}
-		if (!email.includes("@")) {
-			setErrorMessage("Please insert a valid email.");
-			return;
-		}
+		
 
-		const body = { username, email, password };
+		const body = { username, password };
 
 		UsersEndpoint.Register(body)
 			.then(() => navigate("/login", { state: { redirected: true } }))
-			.catch((e: Error) => console.log("Could not register"));
+			.catch(() => console.log("Could not register"));
 	};
 
 	return (
@@ -47,9 +43,6 @@ function RegisterPage() {
 				<div className="flex flex-col items-center gap-4">
 					<div className="flex flex-col">
 						<TextInput required name="username" value={registerForm.username} onChange={handleChange} label="Username:" />
-					</div>
-					<div className="flex flex-col">
-						<TextInput required name="email" value={registerForm.email} onChange={handleChange} label="E-mail:" type="email" />
 					</div>
 					<div className="flex flex-col">
 						<TextInput required name="password" value={registerForm.password} onChange={handleChange} label="Password:" type="password" />

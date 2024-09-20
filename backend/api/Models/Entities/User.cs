@@ -17,10 +17,8 @@ public class User
 	[Column("username")]
 	public string Username { get; set; }
 
-	[Required]
 	[Column("email")]
-	[EmailAddress]
-	public string Email { get; set; }
+	public string? Email { get; set; }
 
 	[Required]
 	[Column("password")]
