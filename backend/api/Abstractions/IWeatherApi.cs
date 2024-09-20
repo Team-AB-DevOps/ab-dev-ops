@@ -2,5 +2,5 @@
 
 public interface IWeatherApi
 {
-    Task<string?> GetWeatherResponse();
+	Task<string?> GetWeatherResponse();
 }

@@ -6,8 +6,8 @@ namespace api.Profiles;
 
 public class PageProfile : Profile
 {
-    public PageProfile()
-    {
-        CreateMap<Page, PageResponseDto>();
-    }
+	public PageProfile()
+	{
+		CreateMap<Page, PageResponseDto>();
+	}
 }

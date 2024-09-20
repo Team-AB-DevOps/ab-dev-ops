@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 var envFile = ".env";
 if (File.Exists(envFile))
 {
-    Env.Load(envFile);
+	Env.Load(envFile);
 }
 
 builder.Configuration.AddEnvironmentVariables();
@@ -23,20 +23,20 @@ builder.Configuration.AddEnvironmentVariables();
 var jwtKey = builder.Configuration["JWT_KEY"] ?? "fallback_test_jwt_key";
 if (string.IsNullOrEmpty(jwtKey))
 {
-    throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
+	throw new InvalidOperationException("JWT_KEY is not set in the configuration.");
 }
 
 // CORS Settings
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(
-        MyAllowSpecificOrigins,
-        policy =>
-        {
-            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-        }
-    );
+	options.AddPolicy(
+		MyAllowSpecificOrigins,
+		policy =>
+		{
+			policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+		}
+	);
 });
 
 // Add services to the container.
@@ -55,53 +55,47 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder
-    .Services.AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-    })
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new TokenValidationParameters
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = builder.Configuration["Jwt:Issuer"],
-            ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-        };
-    });
+	.Services.AddAuthentication(options =>
+	{
+		options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+		options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+	})
+	.AddJwtBearer(options =>
+	{
+		options.TokenValidationParameters = new TokenValidationParameters
+		{
+			ValidateIssuer = true,
+			ValidateAudience = true,
+			ValidateLifetime = true,
+			ValidateIssuerSigningKey = true,
+			ValidIssuer = builder.Configuration["Jwt:Issuer"],
+			ValidAudience = builder.Configuration["Jwt:Audience"],
+			IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+		};
+	});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Hvis "Test"-Enviornment, så andvend in memory sqlite db
 if (builder.Environment.EnvironmentName == "Test")
 {
-    builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("DataSource=:memory:"));
+	builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("DataSource=:memory:"));
 }
 else
 {
-    // MySQL for dev og prod
-    var connectionString = builder.Configuration.GetValue<string>("ConnectionString");
-    if (string.IsNullOrEmpty(connectionString))
-    {
-        throw new Exception(
-            "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory."
-        );
-    }
+	// MySQL for dev og prod
+	var connectionString = builder.Configuration.GetValue<string>("ConnectionString");
+	if (string.IsNullOrEmpty(connectionString))
+	{
+		throw new Exception("Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+	}
 
-    var serverVersion = ServerVersion.AutoDetect(connectionString);
+	var serverVersion = ServerVersion.AutoDetect(connectionString);
 
-    builder.Services.AddDbContext<DataContext>(options =>
-    {
-        options
-            .UseMySql(connectionString, serverVersion)
-            .LogTo(Console.WriteLine, LogLevel.Information)
-            .EnableSensitiveDataLogging()
-            .EnableDetailedErrors();
-    });
+	builder.Services.AddDbContext<DataContext>(options =>
+	{
+		options.UseMySql(connectionString, serverVersion).LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging().EnableDetailedErrors();
+	});
 }
 
 var app = builder.Build();
@@ -128,15 +122,15 @@ app.MapControllers();
 // Apply migrations only if not in the "Test" environment
 if (!app.Environment.IsEnvironment("Test"))
 {
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
-    await dbContext.Database.EnsureDeletedAsync();
-    await dbContext.Database.MigrateAsync();
+	using var scope = app.Services.CreateScope();
+	var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+	await dbContext.Database.EnsureDeletedAsync();
+	await dbContext.Database.MigrateAsync();
 
-    // Call the database initializer at startup
-    var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
-    var sqlFilePath = Path.Combine(app.Environment.ContentRootPath, "Sql", "data.sql");
-    initializer.InitializeDatabase(sqlFilePath);
+	// Call the database initializer at startup
+	var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
+	var sqlFilePath = Path.Combine(app.Environment.ContentRootPath, "Sql", "data.sql");
+	initializer.InitializeDatabase(sqlFilePath);
 }
 
 app.Run();

@@ -8,82 +8,74 @@ namespace api.Controllers;
 [ApiController]
 public class UserController : ControllerBase
 {
-    private readonly IJwtGenerator _jwtGenerator;
-    private readonly IPasswordHasher _passwordHasher;
-    private readonly IUserRepository _userRepository;
+	private readonly IJwtGenerator _jwtGenerator;
+	private readonly IPasswordHasher _passwordHasher;
+	private readonly IUserRepository _userRepository;
 
-    public UserController(
-        IUserRepository userRepository,
-        IPasswordHasher passwordHasher,
-        IJwtGenerator jwtGenerator
-    )
-    {
-        _userRepository = userRepository;
-        _passwordHasher = passwordHasher;
-        _jwtGenerator = jwtGenerator;
-    }
+	public UserController(IUserRepository userRepository, IPasswordHasher passwordHasher, IJwtGenerator jwtGenerator)
+	{
+		_userRepository = userRepository;
+		_passwordHasher = passwordHasher;
+		_jwtGenerator = jwtGenerator;
+	}
 
-    [Route("/api/register")]
-    [HttpPost]
-    public async Task<ActionResult<UserResponseDto>> Register(
-        [FromBody] RegisterRequestDto registerRequest
-    )
-    {
-        var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
-        var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
+	[Route("/api/register")]
+	[HttpPost]
+	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
+	{
+		var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
+		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 
-        if (existingUsername != null)
-        {
-            return BadRequest("Username is already taken");
-        }
+		if (existingUsername != null)
+		{
+			return BadRequest("Username is already taken");
+		}
 
-        if (existingMail != null)
-        {
-            return BadRequest("Email already taken");
-        }
+		if (existingMail != null)
+		{
+			return BadRequest("Email already taken");
+		}
 
-        var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
+		var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
 
-        var newUser = new User
-        {
-            Username = registerRequest.Username,
-            Email = registerRequest.Email,
-            Password = hashedPassword
-        };
+		var newUser = new User
+		{
+			Username = registerRequest.Username,
+			Email = registerRequest.Email,
+			Password = hashedPassword,
+		};
 
-        await _userRepository.CreateUser(newUser);
-        var userDto = new UserResponseDto(newUser.Username, newUser.Email);
+		await _userRepository.CreateUser(newUser);
+		var userDto = new UserResponseDto(newUser.Username, newUser.Email);
 
-        return CreatedAtAction(nameof(Login), userDto);
-    }
+		return CreatedAtAction(nameof(Login), userDto);
+	}
 
-    [Route("/api/login")]
-    [HttpPost]
-    public async Task<ActionResult<TokenUserResponseDto>> Login(
-        [FromBody] LoginRequestDto loginRequest
-    )
-    {
-        const string errorMsg = "Username and/or password is wrong";
-        var userInDb = await _userRepository.GetByUsername(loginRequest.Username);
+	[Route("/api/login")]
+	[HttpPost]
+	public async Task<ActionResult<TokenUserResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
+	{
+		const string errorMsg = "Username and/or password is wrong";
+		var userInDb = await _userRepository.GetByUsername(loginRequest.Username);
 
-        if (userInDb == null)
-        {
-            return BadRequest(errorMsg);
-        }
+		if (userInDb == null)
+		{
+			return BadRequest(errorMsg);
+		}
 
-        var matchingPassword = _passwordHasher.Verify(userInDb.Password, loginRequest.Password);
+		var matchingPassword = _passwordHasher.Verify(userInDb.Password, loginRequest.Password);
 
-        if (!matchingPassword)
-        {
-            return BadRequest(errorMsg);
-        }
+		if (!matchingPassword)
+		{
+			return BadRequest(errorMsg);
+		}
 
-        var token = _jwtGenerator.GenerateToken(userInDb);
+		var token = _jwtGenerator.GenerateToken(userInDb);
 
-        var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
+		var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
 
-        var response = new TokenUserResponseDto(token, userDto);
+		var response = new TokenUserResponseDto(token, userDto);
 
-        return Ok(response);
-    }
+		return Ok(response);
+	}
 }

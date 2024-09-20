@@ -7,22 +7,20 @@ namespace api.Repositories;
 
 public class PageRepository : IPageRepository
 {
-    private readonly DataContext _context;
+	private readonly DataContext _context;
 
-    public PageRepository(DataContext context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
+	public PageRepository(DataContext context)
+	{
+		_context = context ?? throw new ArgumentNullException(nameof(context));
+	}
 
-    public async Task<List<Page>> GetByContent(string? q, string? language)
-    {
-        if (!string.IsNullOrWhiteSpace(q))
-        {
-            return await _context
-                .Pages.Where(p => p.Content.Contains(q) && p.Language.Equals(language))
-                .ToListAsync();
-        }
+	public async Task<List<Page>> GetByContent(string? q, string? language)
+	{
+		if (!string.IsNullOrWhiteSpace(q))
+		{
+			return await _context.Pages.Where(p => p.Content.Contains(q) && p.Language.Equals(language)).ToListAsync();
+		}
 
-        return new List<Page>();
-    }
+		return new List<Page>();
+	}
 }

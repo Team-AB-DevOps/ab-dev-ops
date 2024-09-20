@@ -9,20 +9,20 @@ namespace api.Models.Entities;
 [Index(nameof(Email), IsUnique = true)]
 public class User
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
+	[Key]
+	[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+	public int Id { get; set; }
 
-    [Required]
-    [Column("username")]
-    public string Username { get; set; }
+	[Required]
+	[Column("username")]
+	public string Username { get; set; }
 
-    [Required]
-    [Column("email")]
-    [EmailAddress]
-    public string Email { get; set; }
+	[Required]
+	[Column("email")]
+	[EmailAddress]
+	public string Email { get; set; }
 
-    [Required]
-    [Column("password")]
-    public string Password { get; set; }
+	[Required]
+	[Column("password")]
+	public string Password { get; set; }
 }
