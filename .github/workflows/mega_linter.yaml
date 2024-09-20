@@ -45,4 +45,3 @@ jobs:
           path: |
             megalinter-reports
             mega-linter.log
-
