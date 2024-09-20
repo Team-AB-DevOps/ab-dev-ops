@@ -29,7 +29,7 @@ public class UserTests
 	{
 		// Arrange
 		var userInDb = new User { Email = "Test2@gmail.com", Username = "Test Name" };
-		var requestDto = new RegisterRequestDto("Test Name", "Test@gmail.com", "TestPassword");
+		var requestDto = new RegisterRequestDto("Test Name", "Test@gmail.com", "TestPassword", "TestPassword");
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(userInDb);
 		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
 
@@ -45,7 +45,7 @@ public class UserTests
 	{
 		// Arrange
 		var userInDb = new User { Email = "Joe@gmail.com", Username = "Johan" };
-		var requestDto = new RegisterRequestDto("Jamal", "Joe@gmail.com", "TestPassword");
+		var requestDto = new RegisterRequestDto("Jamal", "Joe@gmail.com", "TestPassword", "TestPassword");
 		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(userInDb);
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(Task.FromResult<User?>(null));
 
@@ -60,7 +60,7 @@ public class UserTests
 	public async Task Register_New_User_Should_Success()
 	{
 		// Arrange
-		var requestDto = new RegisterRequestDto("Julie", "Julie@gmail.com", "TestPassword");
+		var requestDto = new RegisterRequestDto("Julie", "Julie@gmail.com", "TestPassword", "TestPassword");
 		var hashedPassword = "hashed";
 		_userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(Task.FromResult<User?>(null));
@@ -147,5 +147,18 @@ public class UserTests
 		Assert.Equal(requestDto.Username, response.User.Username);
 		Assert.Equal(userInDb.Email, response.User.Email);
 		Assert.NotNull(response.Token);
+	}
+	
+	[Fact]
+	public async Task Register_Not_Matching_Password_Should_Return_Bad_Request()
+	{
+		// Arrange
+		var requestDto = new RegisterRequestDto("Test Name", "Test@gmail.com", "TestPassword", "NotMatchingPassword");
+
+		// Act
+		var result = await _userController.Register(requestDto);
+
+		// Assert
+		Assert.IsType<BadRequestObjectResult>(result.Result);
 	}
 }

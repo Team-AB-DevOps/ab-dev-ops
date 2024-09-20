@@ -23,6 +23,11 @@ public class UserController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
 	{
+		if (!registerRequest.Password.Equals(registerRequest.Password2))
+		{
+			return BadRequest("Passwords are not matching");
+		}
+		
 		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 		var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
 
