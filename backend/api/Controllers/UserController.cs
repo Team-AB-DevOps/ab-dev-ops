@@ -23,7 +23,6 @@ public class UserController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
 	{
-
 		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 
 		if (existingUsername != null)
@@ -33,11 +32,7 @@ public class UserController : ControllerBase
 
 		var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
 
-		var newUser = new User
-		{
-			Username = registerRequest.Username,
-			Password = hashedPassword,
-		};
+		var newUser = new User { Username = registerRequest.Username, Password = hashedPassword, };
 
 		await _userRepository.CreateUser(newUser);
 		var userDto = new UserResponseDto(newUser.Username, newUser.Email);

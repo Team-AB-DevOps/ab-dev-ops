@@ -48,11 +48,7 @@ public class UserTests
 		_userRepositoryMock.GetByUsername(requestDto.Username).Returns(Task.FromResult<User?>(null));
 		_passwordHasherMock.Hash(requestDto.Password).Returns(hashedPassword);
 
-		var newUser = new User
-		{
-			Username = "Julie",
-			Password = hashedPassword,
-		};
+		var newUser = new User { Username = "Julie", Password = hashedPassword, };
 		_userRepositoryMock.CreateUser(newUser).Returns(Task.FromResult(newUser));
 
 		// Act
@@ -62,7 +58,6 @@ public class UserTests
 		var createdResult = Assert.IsType<CreatedAtActionResult>(result.Result);
 		var response = Assert.IsType<UserResponseDto>(createdResult.Value);
 		Assert.Equal(newUser.Username, response.Username);
-
 	}
 
 	[Fact]
@@ -106,11 +101,7 @@ public class UserTests
 	public async Task Login_Existing_Username_And_Correct_Password_Should_Success()
 	{
 		// Arrange
-		var userInDb = new User
-		{
-			Username = "James",
-			Password = "CorrectPw",
-		};
+		var userInDb = new User { Username = "James", Password = "CorrectPw", };
 		var requestDto = new LoginRequestDto("James", "CorrectPw");
 		var jwtKey = "superSecretLongJwtKey";
 
