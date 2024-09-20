@@ -4,5 +4,5 @@ namespace api.Abstractions;
 
 public interface IJwtGenerator
 {
-    string GenerateToken(User user);
+	string GenerateToken(User user);
 }

@@ -7,30 +7,28 @@ namespace api.Controllers;
 [ApiController]
 public class PageController : ControllerBase
 {
-    private readonly IPageRepository _pageRepository;
+	private readonly IPageRepository _pageRepository;
 
-    public PageController(IPageRepository pageRepository)
-    {
-        _pageRepository = pageRepository;
-    }
+	public PageController(IPageRepository pageRepository)
+	{
+		_pageRepository = pageRepository;
+	}
 
-    [Route("/api/search")]
-    [HttpPost]
-    public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromBody] SearchRequestDto searchRequest)
-    {
-        var language = searchRequest.Language ?? "en";
-        
-        var pageResults = await _pageRepository.GetByContent(searchRequest.Q, language);
+	[Route("/api/search")]
+	[HttpPost]
+	public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromBody] SearchRequestDto searchRequest)
+	{
+		var language = searchRequest.Language ?? "en";
 
-        if (pageResults.Count == 0)
-        {
-            return Ok(new List<PageResponseDto>());
-        }
+		var pageResults = await _pageRepository.GetByContent(searchRequest.Q, language);
 
-        var pageResultsDto = pageResults
-            .Select(page => new PageResponseDto(page.Title, page.Url, page.Language, page.Content))
-            .ToList();
+		if (pageResults.Count == 0)
+		{
+			return Ok(new List<PageResponseDto>());
+		}
 
-        return Ok(pageResultsDto);
-    }
+		var pageResultsDto = pageResults.Select(page => new PageResponseDto(page.Title, page.Url, page.Language, page.Content)).ToList();
+
+		return Ok(pageResultsDto);
+	}
 }

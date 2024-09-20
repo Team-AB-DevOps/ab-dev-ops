@@ -1,8 +1,8 @@
 # Template-frontend
 
-# UPDATE MEEEEEEEEE
+## UPDATE MEEEEEEEEE
 
-### Installeret:
+### Installeret
 
 * Tailwind
 * Shadcn (Toast, Input, Label, Button, Skeleton, data table, form)

@@ -1,8 +1,8 @@
 # ¿Who Knows? - Flask application
 
-A search engine from 2009 built with the latest technology! Python 2.7 and Flask 0.5. 
+A search engine from 2009 built with the latest technology! Python 2.7 and Flask 0.5.
 
-**Note**: This application is intentionally full of problems and vulnerabilities. Do not run it in a production environment. 
+**Note**: This application is intentionally full of problems and vulnerabilities. Do not run it in a production environment.
 
 ## Installation
 
@@ -21,10 +21,10 @@ pip install -r requirements.txt --upgrade
 To initialize a new database:
 
 ```bash
-$ make init
+make init
 ```
 
-Note: Windows does not natively support Make. 
+Note: Windows does not natively support Make.
 
 
 ## Running the application
@@ -32,12 +32,12 @@ Note: Windows does not natively support Make.
 Start a development server on port `8080`:
 
 ```bash
-$ make run
+make run
 ```
 Or:
 
 ```bash
-$ python2 app.py
+python2 app.py
 ```
 
 ## Test the application
@@ -45,11 +45,11 @@ $ python2 app.py
 To run the tests:
 
 ```bash
-$ make test
+make test
 ```
 
 Or:
 
 ```bash
-$ python2 ./app_tests.py
+python2 ./app_tests.py
 ```
