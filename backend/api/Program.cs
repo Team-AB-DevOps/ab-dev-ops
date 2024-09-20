@@ -45,7 +45,7 @@ builder.Services.AddScoped<IJwtGenerator, JwtGenerator>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IPageRepository, PageRepository>();
 builder.Services.AddSingleton<DatabaseInitializer>();
-builder.Services.AddHttpClient<WeatherApi>();
+builder.Services.AddHttpClient<IWeatherApi, WeatherApi>();
 builder.Services.AddResponseCaching();
 
 builder.Services.AddControllers();
@@ -117,21 +117,6 @@ app.UseCors(MyAllowSpecificOrigins);
 
 // Apply use of caching
 app.UseResponseCaching();
-
-// Applies caching globally
-app.Use(async (context, next) =>
-{
-    context.Response.GetTypedHeaders().CacheControl =
-        new CacheControlHeaderValue
-        {
-            Public = true,
-            MaxAge = TimeSpan.FromSeconds(30)
-        };
-    context.Response.Headers[HeaderNames.Vary] =
-        new[] { "Accept-Encoding" };
-
-    await next();
-});
 
 app.UseAuthentication();
 

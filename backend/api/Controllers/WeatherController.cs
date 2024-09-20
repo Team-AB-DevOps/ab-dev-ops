@@ -1,4 +1,4 @@
-﻿using api.Services;
+﻿using api.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace api.Controllers;
@@ -6,16 +6,16 @@ namespace api.Controllers;
 [ApiController]
 public class WeatherController : ControllerBase
 {
-    private readonly WeatherApi _weatherApi;
+    private readonly IWeatherApi _weatherApi;
 
-    public WeatherController(WeatherApi weatherApi)
+    public WeatherController(IWeatherApi weatherApi)
     {
         _weatherApi = weatherApi;
     }
 
     [Route("/api/weather")]
     [HttpGet]
-    // [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
+    [ResponseCache(VaryByHeader = "User-Agent", Duration = 1800)]
     public async Task<IActionResult> GetWeather()
     {
         var result = await _weatherApi.GetWeatherResponse();

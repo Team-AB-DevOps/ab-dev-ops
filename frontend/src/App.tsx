@@ -12,6 +12,7 @@ function App() {
 			<PageLayout>
 				<Routes>
 					<Route path="/" element={<SearchPage />} />
+					<Route path="/weather" element={<SearchPage />} />
 					<Route path="/about" element={<AboutPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
