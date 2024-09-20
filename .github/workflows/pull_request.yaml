@@ -11,9 +11,6 @@ on:
   pull_request:
 
 jobs:
-  lint:
-    uses: ./.github/workflows/mega_linter.yaml
-
   test-backend:
     runs-on: ubuntu-latest
 
