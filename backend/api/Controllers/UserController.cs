@@ -27,7 +27,7 @@ public class UserController : ControllerBase
 		{
 			return BadRequest("Passwords are not matching");
 		}
-		
+
 		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
 		var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
 

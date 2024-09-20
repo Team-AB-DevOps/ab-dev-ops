@@ -148,7 +148,7 @@ public class UserTests
 		Assert.Equal(userInDb.Email, response.User.Email);
 		Assert.NotNull(response.Token);
 	}
-	
+
 	[Fact]
 	public async Task Register_Not_Matching_Password_Should_Return_Bad_Request()
 	{

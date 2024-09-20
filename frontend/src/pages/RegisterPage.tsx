@@ -34,7 +34,7 @@ function RegisterPage() {
 			return;
 		}
 
-		const body = { username, email, password };
+		const body = { username, email, password, password2: password };
 
 		UsersEndpoint.Register(body)
 			.then(() => navigate("/login", { state: { redirected: true } }))
