@@ -1,7 +1,6 @@
 # https://megalinter.io/latest/json-schemas/configuration.html
 ENABLE_LINTERS:
   - CSHARP_CSHARPIER
-  - CSHARP_ROSLYNATOR
   - TSX_ESLINT
   - TYPESCRIPT_ES
   - TYPESCRIPT_PRETTIER
