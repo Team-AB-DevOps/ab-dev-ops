@@ -8,7 +8,7 @@ export default function WeatherWidget({ weather }: Props) {
 	console.log(weather);
 
 	return (
-		<div className="flex gap-2 justify-center items-center w-52 h-24 bg-stone-100 rounded-md m-2 p-2 shadow-md outline outline-1 outline-slate-400">
+		<div className="flex gap-2 items-center w-52 h-24 bg-stone-100 rounded-md m-2 p-2 shadow-md outline outline-1 outline-slate-400">
 			<div>
 				<img className="drop-shadow-sm size-20" src={weather?.current.condition.icon} alt="" />
 			</div>

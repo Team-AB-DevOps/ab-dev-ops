@@ -15,10 +15,11 @@ public class WeatherController : ControllerBase
 
     [Route("/api/weather")]
     [HttpGet]
+    // [ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
     public async Task<IActionResult> GetWeather()
     {
         var result = await _weatherApi.GetWeatherResponse();
-        
+
         if (result == null)
         {
             return BadRequest();
