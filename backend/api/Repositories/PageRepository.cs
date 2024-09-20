@@ -18,8 +18,8 @@ public class PageRepository : IPageRepository
     {
         if (!string.IsNullOrWhiteSpace(q))
         {
-            return await _context.Pages
-                .Where(p => p.Content.Contains(q) && p.Language.Equals(language))
+            return await _context
+                .Pages.Where(p => p.Content.Contains(q) && p.Language.Equals(language))
                 .ToListAsync();
         }
 

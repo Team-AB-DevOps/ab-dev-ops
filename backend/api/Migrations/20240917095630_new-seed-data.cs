@@ -17,33 +17,42 @@ namespace api.Migrations
                 columns: new[] { "title", "content", "language", "last_updated", "url" },
                 values: new object[,]
                 {
-                    { "Java Title", "Java", "en", null, "https://en.wikipedia.org/wiki/Java_(programming_language)" },
-                    { "Javascript Title", "Javascript", "en", null, "https://en.wikipedia.org/wiki/JavaScript" }
-                });
+                    {
+                        "Java Title",
+                        "Java",
+                        "en",
+                        null,
+                        "https://en.wikipedia.org/wiki/Java_(programming_language)"
+                    },
+                    {
+                        "Javascript Title",
+                        "Javascript",
+                        "en",
+                        null,
+                        "https://en.wikipedia.org/wiki/JavaScript"
+                    }
+                }
+            );
 
             migrationBuilder.InsertData(
                 table: "users",
                 columns: new[] { "Id", "email", "password", "username" },
-                values: new object[] { 1, "test@test.com", "admin", "admin" });
+                values: new object[] { 1, "test@test.com", "admin", "admin" }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "pages",
-                keyColumn: "title",
-                keyValue: "Java Title");
+            migrationBuilder.DeleteData(table: "pages", keyColumn: "title", keyValue: "Java Title");
 
             migrationBuilder.DeleteData(
                 table: "pages",
                 keyColumn: "title",
-                keyValue: "Javascript Title");
+                keyValue: "Javascript Title"
+            );
 
-            migrationBuilder.DeleteData(
-                table: "users",
-                keyColumn: "Id",
-                keyValue: 1);
+            migrationBuilder.DeleteData(table: "users", keyColumn: "Id", keyValue: 1);
         }
     }
 }

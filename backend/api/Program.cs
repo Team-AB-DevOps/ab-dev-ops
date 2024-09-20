@@ -30,13 +30,13 @@ if (string.IsNullOrEmpty(jwtKey))
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(MyAllowSpecificOrigins,
+    options.AddPolicy(
+        MyAllowSpecificOrigins,
         policy =>
         {
-            policy.AllowAnyOrigin()
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        });
+            policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+        }
+    );
 });
 
 // Add services to the container.
@@ -49,36 +49,37 @@ builder.Services.AddHttpClient<IWeatherApi, WeatherApi>();
 builder.Services.AddResponseCaching();
 
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+builder
+    .Services.AddAuthentication(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
-    };
-});
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey))
+        };
+    });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 
 // Hvis "Test"-Enviornment, så andvend in memory sqlite db
 if (builder.Environment.EnvironmentName == "Test")
 {
-    builder.Services.AddDbContext<DataContext>(options =>
-        options.UseSqlite("DataSource=:memory:"));
+    builder.Services.AddDbContext<DataContext>(options => options.UseSqlite("DataSource=:memory:"));
 }
 else
 {
@@ -87,14 +88,16 @@ else
     if (string.IsNullOrEmpty(connectionString))
     {
         throw new Exception(
-            "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+            "Connection string not found. Ensure the .env file is correctly configured and placed in the root directory."
+        );
     }
 
     var serverVersion = ServerVersion.AutoDetect(connectionString);
 
     builder.Services.AddDbContext<DataContext>(options =>
     {
-        options.UseMySql(connectionString, serverVersion)
+        options
+            .UseMySql(connectionString, serverVersion)
             .LogTo(Console.WriteLine, LogLevel.Information)
             .EnableSensitiveDataLogging()
             .EnableDetailedErrors();
@@ -103,12 +106,10 @@ else
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
 
 app.UseSwagger();
 app.UseSwaggerUI();
-
 
 app.UseHttpsRedirection();
 
@@ -124,7 +125,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-
 // Apply migrations only if not in the "Test" environment
 if (!app.Environment.IsEnvironment("Test"))
 {
@@ -133,7 +133,7 @@ if (!app.Environment.IsEnvironment("Test"))
     await dbContext.Database.EnsureDeletedAsync();
     await dbContext.Database.MigrateAsync();
 
-// Call the database initializer at startup
+    // Call the database initializer at startup
     var initializer = scope.ServiceProvider.GetRequiredService<DatabaseInitializer>();
     var sqlFilePath = Path.Combine(app.Environment.ContentRootPath, "Sql", "data.sql");
     initializer.InitializeDatabase(sqlFilePath);
@@ -141,7 +141,4 @@ if (!app.Environment.IsEnvironment("Test"))
 
 app.Run();
 
-
-public partial class Program
-{
-}
+public partial class Program { }

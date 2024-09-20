@@ -21,7 +21,11 @@ public class UserTests
         _userRepositoryMock = Substitute.For<IUserRepository>();
         _jwtGeneratorMock = Substitute.For<IJwtGenerator>();
 
-        _userController = new UserController(_userRepositoryMock, _passwordHasherMock, _jwtGeneratorMock);
+        _userController = new UserController(
+            _userRepositoryMock,
+            _passwordHasherMock,
+            _jwtGeneratorMock
+        );
     }
 
     [Fact]
@@ -30,10 +34,8 @@ public class UserTests
         // Arrange
         var userInDb = new User { Email = "Test2@gmail.com", Username = "Test Name" };
         var requestDto = new RegisterRequestDto("Test Name", "Test@gmail.com", "TestPassword");
-        _userRepositoryMock.GetByUsername(requestDto.Username)
-            .Returns(userInDb);
-        _userRepositoryMock.GetByEmail(requestDto.Email)
-            .Returns(Task.FromResult<User?>(null));
+        _userRepositoryMock.GetByUsername(requestDto.Username).Returns(userInDb);
+        _userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
 
         // Act
         var result = await _userController.Register(requestDto);
@@ -48,9 +50,9 @@ public class UserTests
         // Arrange
         var userInDb = new User { Email = "Joe@gmail.com", Username = "Johan" };
         var requestDto = new RegisterRequestDto("Jamal", "Joe@gmail.com", "TestPassword");
-        _userRepositoryMock.GetByEmail(requestDto.Email)
-            .Returns(userInDb);
-        _userRepositoryMock.GetByUsername(requestDto.Username)
+        _userRepositoryMock.GetByEmail(requestDto.Email).Returns(userInDb);
+        _userRepositoryMock
+            .GetByUsername(requestDto.Username)
             .Returns(Task.FromResult<User?>(null));
 
         // Act
@@ -66,16 +68,19 @@ public class UserTests
         // Arrange
         var requestDto = new RegisterRequestDto("Julie", "Julie@gmail.com", "TestPassword");
         var hashedPassword = "hashed";
-        _userRepositoryMock.GetByEmail(requestDto.Email)
+        _userRepositoryMock.GetByEmail(requestDto.Email).Returns(Task.FromResult<User?>(null));
+        _userRepositoryMock
+            .GetByUsername(requestDto.Username)
             .Returns(Task.FromResult<User?>(null));
-        _userRepositoryMock.GetByUsername(requestDto.Username)
-            .Returns(Task.FromResult<User?>(null));
-        _passwordHasherMock.Hash(requestDto.Password)
-            .Returns(hashedPassword);
+        _passwordHasherMock.Hash(requestDto.Password).Returns(hashedPassword);
 
-        var newUser = new User { Email = "Julie@gmail.com", Username = "Julie", Password = hashedPassword };
-        _userRepositoryMock.CreateUser(newUser)
-            .Returns(Task.FromResult(newUser));
+        var newUser = new User
+        {
+            Email = "Julie@gmail.com",
+            Username = "Julie",
+            Password = hashedPassword
+        };
+        _userRepositoryMock.CreateUser(newUser).Returns(Task.FromResult(newUser));
 
         // Act
         var result = await _userController.Register(requestDto);
@@ -91,13 +96,16 @@ public class UserTests
     public async Task Login_Wrong_Password_Should_Bad_Request()
     {
         // Arrange
-        var userInDb = new User { Email = "James@gmail.com", Username = "James", Password = "Hashed" };
+        var userInDb = new User
+        {
+            Email = "James@gmail.com",
+            Username = "James",
+            Password = "Hashed"
+        };
         var requestDto = new LoginRequestDto("James", "WrongPw");
 
-        _userRepositoryMock.GetByUsername(requestDto.Username)
-            .Returns(userInDb);
-        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password)
-            .Returns(false);
+        _userRepositoryMock.GetByUsername(requestDto.Username).Returns(userInDb);
+        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password).Returns(false);
 
         // Act
         var result = await _userController.Login(requestDto);
@@ -112,7 +120,8 @@ public class UserTests
         // Arrange
         var requestDto = new LoginRequestDto("Shabob", "CorrectPw");
 
-        _userRepositoryMock.GetByUsername(requestDto.Username)
+        _userRepositoryMock
+            .GetByUsername(requestDto.Username)
             .Returns(Task.FromResult<User?>(null));
 
         // Act
@@ -126,16 +135,18 @@ public class UserTests
     public async Task Login_Existing_Username_And_Correct_Password_Should_Success()
     {
         // Arrange
-        var userInDb = new User { Email = "James@gmail.com", Username = "James", Password = "CorrectPw" };
+        var userInDb = new User
+        {
+            Email = "James@gmail.com",
+            Username = "James",
+            Password = "CorrectPw"
+        };
         var requestDto = new LoginRequestDto("James", "CorrectPw");
         var jwtKey = "superSecretLongJwtKey";
 
-        _userRepositoryMock.GetByUsername(requestDto.Username)
-            .Returns(userInDb);
-        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password)
-            .Returns(true);
-        _jwtGeneratorMock.GenerateToken(userInDb)
-            .Returns(jwtKey);
+        _userRepositoryMock.GetByUsername(requestDto.Username).Returns(userInDb);
+        _passwordHasherMock.Verify(userInDb.Password, requestDto.Password).Returns(true);
+        _jwtGeneratorMock.GenerateToken(userInDb).Returns(jwtKey);
 
         // Act
         var result = await _userController.Login(requestDto);

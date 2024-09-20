@@ -16,10 +16,12 @@ public class PageController : ControllerBase
 
     [Route("/api/search")]
     [HttpPost]
-    public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromBody] SearchRequestDto searchRequest)
+    public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search(
+        [FromBody] SearchRequestDto searchRequest
+    )
     {
         var language = searchRequest.Language ?? "en";
-        
+
         var pageResults = await _pageRepository.GetByContent(searchRequest.Q, language);
 
         if (pageResults.Count == 0)

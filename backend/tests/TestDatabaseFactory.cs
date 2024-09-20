@@ -23,40 +23,45 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.UseEnvironment("Test"); // Set environment to "Test"
-        
-        builder.ConfigureAppConfiguration((context, config) =>
-        {
-            // Try to load .env file if it exists
-            var envFile = "../api/.env";
-            if (File.Exists(envFile))
+
+        builder.ConfigureAppConfiguration(
+            (context, config) =>
             {
-                DotNetEnv.Env.Load(envFile);
+                // Try to load .env file if it exists
+                var envFile = "../api/.env";
+                if (File.Exists(envFile))
+                {
+                    DotNetEnv.Env.Load(envFile);
+                }
+
+                // Add environment variables to configuration
+                config.AddEnvironmentVariables();
+
+                // Get JWT settings from environment variables or use fallback values
+                var jwtKey =
+                    Environment.GetEnvironmentVariable("JWT_KEY") ?? "fallback_test_jwt_key";
+                var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? "test_issuer";
+                var jwtAudience =
+                    Environment.GetEnvironmentVariable("Jwt__Audience") ?? "test_audience";
+
+                // Add in-memory configuration
+                config.AddInMemoryCollection(
+                    new Dictionary<string, string?>
+                    {
+                        { "JWT_KEY", jwtKey },
+                        { "Jwt:Issuer", jwtIssuer },
+                        { "Jwt:Audience", jwtAudience }
+                    }
+                );
             }
-
-            // Add environment variables to configuration
-            config.AddEnvironmentVariables();
-
-            // Get JWT settings from environment variables or use fallback values
-            var jwtKey = Environment.GetEnvironmentVariable("JWT_KEY") ?? "fallback_test_jwt_key";
-            var jwtIssuer = Environment.GetEnvironmentVariable("Jwt__Issuer") ?? "test_issuer";
-            var jwtAudience = Environment.GetEnvironmentVariable("Jwt__Audience") ?? "test_audience";
-
-            // Add in-memory configuration
-            config.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                { "JWT_KEY", jwtKey },
-                { "Jwt:Issuer", jwtIssuer },
-                { "Jwt:Audience", jwtAudience }
-            });
-        });
-        
-        
+        );
 
         builder.ConfigureServices(services =>
         {
             // Remove the existing DbContext registration
-            var descriptor = services.SingleOrDefault(
-                d => d.ServiceType == typeof(DbContextOptions<DataContext>));
+            var descriptor = services.SingleOrDefault(d =>
+                d.ServiceType == typeof(DbContextOptions<DataContext>)
+            );
             if (descriptor != null)
             {
                 services.Remove(descriptor);
@@ -76,13 +81,13 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
                 dbContext.Database.EnsureCreated(); // Ensure the in-memory database is created
-                
+
                 SeedDatabase(dbContext); // Seed db
             }
         });
     }
-    
-    private void SeedDatabase(DataContext dbContext)
+
+    private static void SeedDatabase(DataContext dbContext)
     {
         // Check if there are any pages already in the database
         if (!dbContext.Pages.Any())
@@ -112,7 +117,7 @@ public class TestDatabaseFactory : WebApplicationFactory<Program>
                     Content = "This is the content for Go",
                     LastUpdated = DateTime.UtcNow
                 }
-                // Add more pages as needed
+            // Add more pages as needed
             );
 
             // Save changes to the database

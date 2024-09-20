@@ -12,7 +12,7 @@ public class User
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
-    
+
     [Required]
     [Column("username")]
     public string Username { get; set; }

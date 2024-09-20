@@ -14,7 +14,7 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
     {
         _factory = factory;
     }
-    
+
     [Fact]
     public async Task Search_Endpoint_Without_language_Should_Return_OK()
     {
@@ -22,7 +22,7 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
         var client = _factory.CreateClient();
         var body = new SearchRequestDto("script");
         JsonContent content = JsonContent.Create(body);
-        
+
         // Act
         var response = await client.PostAsync("/api/search", content);
 
@@ -37,7 +37,7 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
         var client = _factory.CreateClient();
         var body = new SearchRequestDto("script", "en");
         JsonContent content = JsonContent.Create(body);
-        
+
         // Act
         var response = await client.PostAsync("/api/search", content);
 

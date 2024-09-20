@@ -10,14 +10,16 @@ public class WeatherApi : IWeatherApi
     public WeatherApi(HttpClient httpClient)
     {
         _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-        _weatherKey = Environment.GetEnvironmentVariable("WEATHER_API_KEY") ??
-                      throw new ArgumentNullException(nameof(_weatherKey));
+        _weatherKey =
+            Environment.GetEnvironmentVariable("WEATHER_API_KEY")
+            ?? throw new ArgumentNullException(nameof(_weatherKey));
     }
 
     public async Task<string?> GetWeatherResponse()
     {
         var response = await _httpClient.GetAsync(
-            $"http://api.weatherapi.com/v1/current.json?key={_weatherKey}&q=Copenhagen&aqi=no");
+            $"http://api.weatherapi.com/v1/current.json?key={_weatherKey}&q=Copenhagen&aqi=no"
+        );
 
         if (response.IsSuccessStatusCode)
         {

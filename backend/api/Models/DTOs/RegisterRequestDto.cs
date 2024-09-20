@@ -1,7 +1,3 @@
 ﻿namespace api.Models.DTOs;
 
-public record RegisterRequestDto(
-        string Username,
-        string Email,
-        string Password
-    );
+public record RegisterRequestDto(string Username, string Email, string Password);

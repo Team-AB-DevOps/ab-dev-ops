@@ -6,8 +6,8 @@ namespace api.Models.Entities;
 [Table("pages")]
 public class Page
 {
-    [Key, DatabaseGenerated((DatabaseGeneratedOption.None))] 
-    [Column("title")] 
+    [Key, DatabaseGenerated((DatabaseGeneratedOption.None))]
+    [Column("title")]
     [Required]
     public string Title { get; set; }
 
@@ -21,9 +21,9 @@ public class Page
 
     [Column("content")]
     [Required]
-    public string Content { get; set; } 
-    
+    public string Content { get; set; }
+
     // https://www.entityframeworktutorial.net/faq/set-created-and-modified-date-in-efcore.aspx
-    [Column("last_updated")] 
+    [Column("last_updated")]
     public DateTime? LastUpdated { get; set; }
 }

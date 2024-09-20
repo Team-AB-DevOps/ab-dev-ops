@@ -1,10 +1,10 @@
 # Whoknows Variations
 
-This is the Whoknows variations repository. It is not meant for production as it contains several security vulnerabilities and problematic parts on purpose. 
+This is the Whoknows variations repository. It is not meant for production as it contains several security vulnerabilities and problematic parts on purpose.
 
 ## How to get started
 
-Each branch is a tutorial in a different topic based on the same Flask application as in the `main` branch. 
+Each branch is a tutorial in a different topic based on the same Flask application as in the `main` branch.
 
 One way to follow along is by:
 
@@ -16,7 +16,7 @@ One way to follow along is by:
 
 4. Following the instructions in the README of the branch.
 
-5. You can now push changes to your own repository. 
+5. You can now push changes to your own repository.
 
 ## Pull requests
 
