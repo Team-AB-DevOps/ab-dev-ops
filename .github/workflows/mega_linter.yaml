@@ -36,6 +36,7 @@ jobs:
           GITHUB_STATUS_REPORTER: true
           GITHUB_COMMENT_REPORTER: true
           REPORTERS_MARKDOWN_TYPE: true
+          FORMATTERS_DISABLE_ERRORS: false
 
       - name: Archive production artifacts
         if: ${{ success() }} || ${{ failure() }}
