@@ -23,16 +23,32 @@ public class UserController : ControllerBase
 	[HttpPost]
 	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
 	{
+		if (!registerRequest.Password.Equals(registerRequest.Password2))
+		{
+			return BadRequest("Passwords are not matching");
+		}
+
 		var existingUsername = await _userRepository.GetByUsername(registerRequest.Username);
+		var existingMail = await _userRepository.GetByEmail(registerRequest.Email);
 
 		if (existingUsername != null)
 		{
 			return BadRequest("Username is already taken");
 		}
 
+		if (existingMail != null)
+		{
+			return BadRequest("Email already taken");
+		}
+
 		var hashedPassword = _passwordHasher.Hash(registerRequest.Password);
 
-		var newUser = new User { Username = registerRequest.Username, Password = hashedPassword, };
+		var newUser = new User
+		{
+			Username = registerRequest.Username,
+			Email = registerRequest.Email,
+			Password = hashedPassword,
+		};
 
 		await _userRepository.CreateUser(newUser);
 		var userDto = new UserResponseDto(newUser.Username, newUser.Email);

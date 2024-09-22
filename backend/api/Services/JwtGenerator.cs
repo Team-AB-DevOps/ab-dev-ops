@@ -26,7 +26,7 @@ public class JwtGenerator : IJwtGenerator
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
 			new Claim("userId", user.Id.ToString()),
 			new Claim("username", user.Username),
-			new Claim("email", user.Email ?? ""),
+			new Claim("email", user.Email),
 		};
 
 		// TODO: Save Jwt key somewhere more secure
