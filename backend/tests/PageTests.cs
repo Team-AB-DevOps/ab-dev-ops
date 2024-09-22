@@ -20,11 +20,9 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
 	{
 		//Arrange
 		var client = _factory.CreateClient();
-		var body = new SearchRequestDto("script");
-		JsonContent content = JsonContent.Create(body);
 
 		// Act
-		var response = await client.PostAsync("/api/search", content);
+		var response = await client.GetAsync("/api/search?q=JavaScript");
 
 		// Assert
 		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -35,11 +33,9 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
 	{
 		//Arrange
 		var client = _factory.CreateClient();
-		var body = new SearchRequestDto("script", "en");
-		JsonContent content = JsonContent.Create(body);
 
 		// Act
-		var response = await client.PostAsync("/api/search", content);
+		var response = await client.GetAsync("/api/search?q=JavaScript&language=en");
 
 		// Assert
 		Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -50,11 +46,9 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
 	{
 		//Arrange
 		var client = _factory.CreateClient();
-		var body = new SearchRequestDto("script");
-		JsonContent content = JsonContent.Create(body);
 
 		// Act
-		var response = await client.PostAsync("/api/search", content);
+		var response = await client.GetAsync("/api/search?q=script");
 		var pages = await response.Content.ReadFromJsonAsync<List<Page>>();
 
 		// Assert
@@ -72,11 +66,9 @@ public class PageTests : IClassFixture<TestDatabaseFactory>
 	{
 		//Arrange
 		var client = _factory.CreateClient();
-		var body = new SearchRequestDto("leverpostej");
-		JsonContent content = JsonContent.Create(body);
 
 		// Act
-		var response = await client.PostAsync("/api/search", content);
+		var response = await client.GetAsync("/api/search?q=leverpostej");
 		var pages = await response.Content.ReadFromJsonAsync<List<Page>>();
 
 		// Assert
