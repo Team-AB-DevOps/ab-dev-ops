@@ -7,9 +7,14 @@ using DotNetEnv;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
+
+builder.Host.UseSerilog(); // Use Serilog instead of the default .NET logger
 
 // Try to load .env file if it exists for local development
 var envFile = ".env";
@@ -27,11 +32,11 @@ if (string.IsNullOrEmpty(jwtKey))
 }
 
 // CORS Settings
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
 	options.AddPolicy(
-		MyAllowSpecificOrigins,
+		myAllowSpecificOrigins,
 		policy =>
 		{
 			policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
@@ -108,7 +113,7 @@ app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
 // Apply CORS settings
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(myAllowSpecificOrigins);
 
 // Apply use of caching
 app.UseResponseCaching();
