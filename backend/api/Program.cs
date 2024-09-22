@@ -11,16 +11,10 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 // Configure Serilog
-Log.Logger = new LoggerConfiguration()
-	.MinimumLevel.Debug()
-	.WriteTo.Console()
-	.CreateLogger();
+Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.Console().CreateLogger();
 
 builder.Host.UseSerilog(); // Use Serilog instead of the default .NET logger
-
 
 // Try to load .env file if it exists for local development
 var envFile = ".env";
@@ -108,7 +102,6 @@ else
 		options.UseMySql(connectionString, serverVersion).LogTo(Console.WriteLine, LogLevel.Information).EnableSensitiveDataLogging().EnableDetailedErrors();
 	});
 }
-
 
 var app = builder.Build();
 
