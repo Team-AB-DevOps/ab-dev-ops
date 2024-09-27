@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   Mega-Linter:
+    name: Mega Linter
     runs-on: ubuntu-latest
 
     steps:

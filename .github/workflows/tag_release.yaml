@@ -7,6 +7,7 @@ on:
 
 jobs:
   push-images:
+    name: Build Docker images and push to Docker Hub
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
           tags: alihmohammad/devops-backend:${{ github.ref_name }} # Tags image with github tag from repo
 
   deploy-containers:
+    name: Deploy Docker containers on Azure VM
     runs-on: ubuntu-latest
     needs: push-images
     steps:
@@ -63,9 +65,10 @@ jobs:
             echo "Build containers"
             sudo docker compose --env-file .env up -d
 
-    name: Automated API tests using Postman CLI
+    
 
   automated-api-tests:
+    name: API tests using Postman CLI
     runs-on: ubuntu-latest
     needs: deploy-containers
     steps:
