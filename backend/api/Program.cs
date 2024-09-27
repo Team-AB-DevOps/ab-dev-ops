@@ -92,10 +92,7 @@ else
 	var connectionString = builder.Configuration.GetValue<string>("ConnectionString");
 	if (string.IsNullOrEmpty(connectionString))
 	{
-		throw new ArgumentNullException(
-			nameof(connectionString),
-			"Connection string not found. Ensure the .env file is correctly configured and placed in the root directory."
-		);
+		throw new InvalidOperationException("Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
 	}
 
 	var serverVersion = ServerVersion.AutoDetect(connectionString);

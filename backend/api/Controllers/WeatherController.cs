@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers;
 
 [ApiController]
+[Route("/api")]
 public class WeatherController : ControllerBase
 {
 	private readonly IWeatherApi _weatherApi;
@@ -13,7 +14,7 @@ public class WeatherController : ControllerBase
 		_weatherApi = weatherApi;
 	}
 
-	[Route("/api/weather")]
+	[Route("weather")]
 	[HttpGet]
 	[ResponseCache(VaryByHeader = "User-Agent", Duration = 1800)]
 	public async Task<IActionResult> GetWeather()

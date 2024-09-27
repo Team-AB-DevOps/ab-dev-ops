@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers;
 
 [ApiController]
+[Route("/api")]
 public class UserController : ControllerBase
 {
 	private readonly IJwtGenerator _jwtGenerator;
@@ -19,7 +20,7 @@ public class UserController : ControllerBase
 		_jwtGenerator = jwtGenerator;
 	}
 
-	[Route("/api/register")]
+	[Route("register")]
 	[HttpPost]
 	public async Task<ActionResult<UserResponseDto>> Register([FromBody] RegisterRequestDto registerRequest)
 	{
@@ -56,7 +57,7 @@ public class UserController : ControllerBase
 		return CreatedAtAction(nameof(Login), userDto);
 	}
 
-	[Route("/api/login")]
+	[Route("login")]
 	[HttpPost]
 	public async Task<ActionResult<TokenUserResponseDto>> Login([FromBody] LoginRequestDto loginRequest)
 	{

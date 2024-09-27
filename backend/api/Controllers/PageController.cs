@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace api.Controllers;
 
 [ApiController]
+[Route("/api")]
 public class PageController : ControllerBase
 {
 	private readonly IPageRepository _pageRepository;
@@ -14,7 +15,7 @@ public class PageController : ControllerBase
 		_pageRepository = pageRepository;
 	}
 
-	[Route("/api/search")]
+	[Route("search")]
 	[HttpGet]
 	public async Task<ActionResult<IEnumerable<PageResponseDto>>> Search([FromQuery] string? q, [FromQuery] string? language = "en")
 	{
