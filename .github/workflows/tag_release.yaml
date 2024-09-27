@@ -65,8 +65,6 @@ jobs:
             echo "Build containers"
             sudo docker compose --env-file .env up -d
 
-    
-
   automated-api-tests:
     name: API tests using Postman CLI
     runs-on: ubuntu-latest
