@@ -5,7 +5,7 @@ export type TParams = {
 };
 
 class ApiClient {
-	private baseUrl: URL;
+	private readonly baseUrl: URL;
 
 	public constructor() {
 		const baseUrl = import.meta.env.VITE_API_BASE_URL;

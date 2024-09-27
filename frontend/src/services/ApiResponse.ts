@@ -1,6 +1,6 @@
 class ApiResponse<T> {
 	public value?: T;
-	private statusCode: number;
+	private readonly statusCode: number;
 	private errorMessage?: string;
 
 	constructor(status: number) {

@@ -44,11 +44,9 @@ export default function Header() {
 				</h1>
 				<div className="text-blue-500 underline absolute top-0 right-0 flex gap-5 mr-8 pt-1">
 					{isAuthenticated ? (
-						<>
-							<a className="cursor-pointer" onClick={handleClick}>
-								Log Out [{user?.username}]
-							</a>
-						</>
+						<a className="cursor-pointer" onClick={handleClick}>
+							Log Out [{user?.username}]
+						</a>
 					) : (
 						<>
 							<Link to={"/register"}>Register</Link>
