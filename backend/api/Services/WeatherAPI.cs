@@ -10,7 +10,8 @@ public class WeatherApi : IWeatherApi
 	public WeatherApi(HttpClient httpClient)
 	{
 		_httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
-		_weatherKey = Environment.GetEnvironmentVariable("WEATHER_API_KEY") ?? throw new ArgumentNullException("Could not find WEATHER_API_KEY in environment variables");
+		_weatherKey =
+			Environment.GetEnvironmentVariable("WEATHER_API_KEY") ?? throw new ArgumentNullException("Could not find WEATHER_API_KEY in environment variables");
 	}
 
 	public async Task<string?> GetWeatherResponse()
