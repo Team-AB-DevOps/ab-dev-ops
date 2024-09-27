@@ -42,40 +42,38 @@ function RegisterPage() {
 	};
 
 	return (
-		<>
-			<div>
-				<h3 className="text-xl font-bold mb-3 text-center">Sign Up</h3>
-				<div className="flex flex-col items-center gap-4">
-					<div className="flex flex-col">
-						<TextInput required name="username" value={registerForm.username} onChange={handleChange} label="Username:" />
-					</div>
-					<div className="flex flex-col">
-						<TextInput required name="email" value={registerForm.email} onChange={handleChange} label="E-mail:" type="email" />
-					</div>
-					<div className="flex flex-col">
-						<TextInput required name="password" value={registerForm.password} onChange={handleChange} label="Password:" type="password" />
-					</div>
-					<div className="flex flex-col">
-						<TextInput
-							required
-							name="passwordRepeat"
-							value={registerForm.passwordRepeat}
-							onChange={handleChange}
-							label="Password (repeat):"
-							type="password"
-						/>
-					</div>
-					<div className="flex flex-col gap-3 justify-center items-center">
-						<Button onClick={handleSubmit}>Sign up</Button>
-						{errorMessage ?? (
-							<div>
-								<p className="text-red-800">{errorMessage}</p>
-							</div>
-						)}
-					</div>
+		<div>
+			<h3 className="text-xl font-bold mb-3 text-center">Sign Up</h3>
+			<div className="flex flex-col items-center gap-4">
+				<div className="flex flex-col">
+					<TextInput required name="username" value={registerForm.username} onChange={handleChange} label="Username:" />
+				</div>
+				<div className="flex flex-col">
+					<TextInput required name="email" value={registerForm.email} onChange={handleChange} label="E-mail:" type="email" />
+				</div>
+				<div className="flex flex-col">
+					<TextInput required name="password" value={registerForm.password} onChange={handleChange} label="Password:" type="password" />
+				</div>
+				<div className="flex flex-col">
+					<TextInput
+						required
+						name="passwordRepeat"
+						value={registerForm.passwordRepeat}
+						onChange={handleChange}
+						label="Password (repeat):"
+						type="password"
+					/>
+				</div>
+				<div className="flex flex-col gap-3 justify-center items-center">
+					<Button onClick={handleSubmit}>Sign up</Button>
+					{errorMessage ?? (
+						<div>
+							<p className="text-red-800">{errorMessage}</p>
+						</div>
+					)}
 				</div>
 			</div>
-		</>
+		</div>
 	);
 }
 
