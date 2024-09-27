@@ -29,7 +29,6 @@ public class JwtGenerator : IJwtGenerator
 			new Claim("email", user.Email),
 		};
 
-		// TODO: Save Jwt key somewhere more secure
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtKey));
 		var signIn = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 		var token = new JwtSecurityToken(
