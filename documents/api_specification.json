@@ -7,9 +7,7 @@
   "paths": {
     "/api/search": {
       "get": {
-        "tags": [
-          "Page"
-        ],
+        "tags": ["Page"],
         "parameters": [
           {
             "name": "q",
@@ -62,9 +60,7 @@
     },
     "/api/register": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -110,9 +106,7 @@
     },
     "/api/login": {
       "post": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "requestBody": {
           "content": {
             "application/json": {
@@ -158,9 +152,7 @@
     },
     "/api/weather": {
       "get": {
-        "tags": [
-          "Weather"
-        ],
+        "tags": ["Weather"],
         "responses": {
           "200": {
             "description": "Success"

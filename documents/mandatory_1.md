@@ -12,7 +12,7 @@
 ---
 
 ## Dependency Graph
-```
+```sh
 digraph G {
     # Core Dependencies
     "Flask" -> "app"
@@ -49,7 +49,7 @@ digraph G {
 }
 ```
 
-![App Architecture](/documents/images/app_architecture.png)
+![App Architecture](./images/app_architecture.png)
 
 ---
 
@@ -80,7 +80,7 @@ digraph G {
             password_hash = hash_object.hexdigest()
             return password_hash
         ```
-        
+
 4. **Secret key is not secret**
     * Unsafe use of `secret_key` which the value is visible for all
         ```py
@@ -154,7 +154,7 @@ By combining Github Flow and Feature Branching, we achieve the following advanta
 ## OpenAPI Specification
 
 
-Can also be found [here](/documents/api_specification.json)
+Can also be found [here](./api_specification.json) as a file.
 
 ```json
 {
@@ -421,4 +421,4 @@ Can also be found [here](/documents/api_specification.json)
 ```
 ---
 
-#### Made by Ali & Brian, 27/09/2024
+### Made by Ali & Brian, 27/09/2024
