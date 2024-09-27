@@ -16,7 +16,7 @@ public class WeatherController : ControllerBase
 
 	[Route("weather")]
 	[HttpGet]
-	[ResponseCache(VaryByHeader = "User-Agent", Duration = 1800)]
+	[ResponseCache(VaryByHeader = "User-Agent", Duration = 3600)]
 	public async Task<IActionResult> GetWeather()
 	{
 		var result = await _weatherApi.GetWeatherResponse();
