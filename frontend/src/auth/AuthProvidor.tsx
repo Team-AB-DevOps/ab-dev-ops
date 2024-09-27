@@ -55,7 +55,7 @@ function AuthProvidor(props: AuthProps) {
 					return;
 				}
 
-				const payload = token!.split(".")[1];
+				const payload = token.split(".")[1];
 				const { username, email } = JSON.parse(atob(payload));
 
 				setUser({ email, username });
@@ -78,9 +78,7 @@ function AuthProvidor(props: AuthProps) {
 	}, [user, isAuthenticated, logout, getAccessToken, login]);
 
 	return (
-		<>
-			<AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
-		</>
+		<AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
 	);
 }
 

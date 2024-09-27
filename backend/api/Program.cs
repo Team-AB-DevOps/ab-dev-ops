@@ -92,7 +92,10 @@ else
 	var connectionString = builder.Configuration.GetValue<string>("ConnectionString");
 	if (string.IsNullOrEmpty(connectionString))
 	{
-		throw new Exception("Connection string not found. Ensure the .env file is correctly configured and placed in the root directory.");
+		throw new ArgumentNullException(
+			nameof(connectionString),
+			"Connection string not found. Ensure the .env file is correctly configured and placed in the root directory."
+		);
 	}
 
 	var serverVersion = ServerVersion.AutoDetect(connectionString);
@@ -138,6 +141,6 @@ if (!app.Environment.IsEnvironment("Test"))
 	initializer.InitializeDatabase(sqlFilePath);
 }
 
-app.Run();
+await app.RunAsync();
 
 public partial class Program { }
