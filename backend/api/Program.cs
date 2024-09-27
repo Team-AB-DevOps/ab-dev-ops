@@ -138,6 +138,6 @@ if (!app.Environment.IsEnvironment("Test"))
 	initializer.InitializeDatabase(sqlFilePath);
 }
 
-app.Run();
+await app.RunAsync();
 
 public partial class Program { }
