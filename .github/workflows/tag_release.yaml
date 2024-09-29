@@ -62,7 +62,7 @@ jobs:
 
             echo "Insert variables for building containers"
             echo "TAG=$TAG_NAME" > .env
-            echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" > .env
+            echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
 
             echo "Build containers"
             sudo docker compose --env-file .env up -d
