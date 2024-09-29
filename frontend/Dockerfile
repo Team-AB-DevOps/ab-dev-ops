@@ -15,7 +15,7 @@ RUN npm install && npm install -g serve@14.2.3
 COPY . .
 
 # Set environment variable
-ENV VITE_API_BASE_URL="http://40.127.181.51:8081"
+ENV VITE_API_BASE_URL="http://67.207.73.30:8081"
 
 # Build the application
 RUN npm run build

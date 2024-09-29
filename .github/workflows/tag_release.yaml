@@ -33,7 +33,7 @@ jobs:
           tags: alihmohammad/devops-backend:${{ github.ref_name }} # Tags image with github tag from repo
 
   deploy-containers:
-    name: Deploy Docker containers on Azure VM
+    name: Deploy Docker containers on DigitalOcean VM
     runs-on: ubuntu-latest
     needs: push-images
     steps:
@@ -41,11 +41,12 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         env:
           TAG_NAME: ${{ github.ref_name }} # Github tag sendes som env TAG_NAME til VM
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         with:
           host: ${{ vars.VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
-          envs: TAG_NAME
+          envs: TAG_NAME,MYSQL_PASSWORD
           script: |
             echo "cd to working directory"
             cd ./production  
@@ -61,6 +62,7 @@ jobs:
 
             echo "Insert variables for building containers"
             echo "TAG=$TAG_NAME" > .env
+            echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" > .env
 
             echo "Build containers"
             sudo docker compose --env-file .env up -d
