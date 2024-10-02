@@ -1,6 +1,8 @@
 # Use an official Node runtime as a parent image
 FROM node:18-alpine
 
+ARG API_URL
+
 # Set the working directory to /app
 WORKDIR /app
 
@@ -15,7 +17,7 @@ RUN npm install && npm install -g serve@14.2.3
 COPY . .
 
 # Set environment variable
-ENV VITE_API_BASE_URL="http://67.207.73.30:8081"
+ENV VITE_API_BASE_URL="http://${API_URL}:8081"
 
 # Build the application
 RUN npm run build
