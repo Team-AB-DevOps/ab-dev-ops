@@ -16,7 +16,6 @@ on:
     tags:
       - "*"
 
-
 jobs:
   test-backend:
     name: Test and build backend
