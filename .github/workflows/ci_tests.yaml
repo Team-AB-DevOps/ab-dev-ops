@@ -1,4 +1,4 @@
-name: Pull Request
+name: CI Tests
 
 permissions:
   actions: write
@@ -7,8 +7,14 @@ permissions:
   contents: write
   checks: write
 
+# Aktiveres ved pull requests, push til main eller nye tag releases
 on:
   pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - "*"
 
 jobs:
   test-backend:
