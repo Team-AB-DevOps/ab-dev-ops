@@ -51,6 +51,17 @@ jobs:
     runs-on: ubuntu-latest
     needs: push-images
     steps:
+      - uses: actions/checkout@v4
+
+      - name: scp docker-compose.yml to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.VM_IP_ADDRESS }}
+          username: ${{ vars.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "~/production"
+
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.0.3
         env:
