@@ -13,5 +13,5 @@ on:
 jobs:
   call-tests:
     name: Run Tests
-    uses: ./.github/tests.yaml
+    uses: ./.github/workflows/tests.yaml
 
