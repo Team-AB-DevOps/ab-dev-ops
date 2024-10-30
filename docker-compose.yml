@@ -18,7 +18,7 @@ services:
             - "8081:8080"
         environment:
             - ASPNETCORE_ENVIRONMENT=Production
-            - ConnectionString=Server=database-container;Database=devops_db;User=root;Password=devops;SslMode=None;
+            - ConnectionString=Server=database-container;Database=devops_db;User=root;Password=${MYSQL_PASSWORD};SslMode=None;
             - ASPNETCORE_URLS=http://0.0.0.0:8080;
             - JWT_KEY=d6b3dbd74df79c21f57d64de24ac1f0855941d19e7deb6d6d4d500f6dab077b7;
             - WEATHER_API_KEY=56bf961a0ee5487285573509242009
@@ -39,7 +39,7 @@ services:
         volumes:
             - DEVOPS:/var/lib/mysql
         healthcheck:
-          test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_ROOT_PASSWORD}"]
+          test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p${MYSQL_PASSWORD}"]
           timeout: 20s
           retries: 10
           start_period: 10s
