@@ -1,3 +1,4 @@
+import useAuth from "@/auth/UseAuth";
 import Button from "@/components/core/Button";
 import { TextInput } from "@/components/core/Input";
 import UsersEndpoint from "@/services/UsersEndpoint";
@@ -15,13 +16,14 @@ function RegisterPage() {
 	const [registerForm, setRegisterForm] = React.useState(INIT_FORM);
 	const [errorMessage, setErrorMessage] = React.useState("");
 	const navigate = useNavigate();
+	const auth = useAuth();
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		setRegisterForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const { username, email, password, passwordRepeat } = registerForm;
 
 		if (password !== passwordRepeat) {
@@ -36,9 +38,13 @@ function RegisterPage() {
 
 		const body = { username, email, password, password2: password };
 
-		UsersEndpoint.Register(body)
-			.then(() => navigate("/login", { state: { redirected: true } }))
-			.catch(() => console.log("Could not register"));
+		try {
+			await UsersEndpoint.Register(body);
+			auth.login({ username, password });
+			navigate("/", { state: { redirected: true } });
+		} catch (error) {
+			console.log("Could not register");
+		}
 	};
 
 	return (
