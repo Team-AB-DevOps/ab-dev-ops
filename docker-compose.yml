@@ -50,9 +50,9 @@ services:
     image: nginx:latest
     container_name: nginx-container
     ports:
-      - "80:80"  # Expose Nginx on port 80
+      - "80:80" # Expose Nginx on port 80
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf  # Mount the custom Nginx config
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the custom Nginx config
     depends_on:
       - product.frontend
       - product.backend
