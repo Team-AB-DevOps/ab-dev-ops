@@ -5,6 +5,7 @@ import SearchPage from "@/pages/SearchPage";
 import AboutPage from "./pages/AboutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 					<Route path="/about" element={<AboutPage />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/register" element={<RegisterPage />} />
+					<Route path="/reset-password" element={<ResetPasswordPage />} />
 					<Route path="*" element={<h2>404 Page not found</h2>} />
 
 					{/*<Route path="/products" >

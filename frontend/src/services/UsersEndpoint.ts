@@ -1,10 +1,15 @@
 import IUser from "@/models/User";
 import ApiClient from "./ApiClient";
 
-type TRegisterRequest = { username: string; email: string; password: string, password2: string };
-type TLoginRequest = { username: string, password: string };
+type TRegisterRequest = { username: string; email: string; password: string; password2: string };
+type TLoginRequest = { username: string; password: string };
+type TChangePasswordRequest = {
+	currentPassword: string;
+	newPassword: string;
+	newPassword2: string;
+};
 
-export type LoginResponse = {user: IUser, token: string}
+export type LoginResponse = { user: IUser; token: string };
 
 class UsersEndpoint {
 	static async Register(user: TRegisterRequest): Promise<IUser> {
@@ -26,6 +31,14 @@ class UsersEndpoint {
 		}
 
 		return resp.value!;
+	}
+
+	static async UpdatePassword(id: number, body: TChangePasswordRequest) {
+		const resp = await new ApiClient().Patch<null, TChangePasswordRequest>(`users/${id}`, body);
+
+		if (resp.error) {
+			throw new Error(resp.error)
+		}
 	}
 }
 
