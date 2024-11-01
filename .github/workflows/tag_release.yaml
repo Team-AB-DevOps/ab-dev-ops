@@ -46,6 +46,24 @@ jobs:
           push: true # Push to Docker Hub
           tags: alihmohammad/devops-backend:${{ github.ref_name }} # Tags image with github tag from repo
 
+      - name: Docker Scout for Frontend
+        uses: docker/scout-action@v1
+        with:
+          command: cves,recommendations
+          image: alihmohammad/devops-frontend:${{ github.ref_name }}
+          only-severities: critical,high,medium
+          write-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }} # to be able to write the comment
+
+      - name: Docker Scout for Backend
+        uses: docker/scout-action@v1
+        with:
+          command: cves,recommendations
+          image: alihmohammad/devops-backend:${{ github.ref_name }}
+          only-severities: critical,high,medium
+          write-comment: true
+          github-token: ${{ secrets.GITHUB_TOKEN }} # to be able to write the comment
+
   deploy-containers:
     name: Deploy Docker containers on DigitalOcean VM
     runs-on: ubuntu-latest
@@ -76,11 +94,13 @@ jobs:
         env:
           TAG_NAME: ${{ github.ref_name }} # Github tag sendes som env TAG_NAME til VM
           MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          WEATHER_KEY: ${{ secrets.WEATHER_API_KEY }}
+          JWT_KEY: ${{ secrets.JWT_KEY }}
         with:
           host: ${{ vars.VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
-          envs: TAG_NAME,MYSQL_PASSWORD
+          envs: TAG_NAME,MYSQL_PASSWORD,WEATHER_KEY,JWT_KEY
           script: |
             echo "cd to working directory"
             cd ./production  
@@ -97,6 +117,8 @@ jobs:
             echo "Insert variables for building containers"
             echo "TAG=$TAG_NAME" > .env
             echo "MYSQL_PASSWORD=$MYSQL_PASSWORD" >> .env
+            echo "JWT_KEY=$JWT_KEY" >> .env
+            echo "WEATHER_KEY=$WEATHER_KEY" >> .env
 
             echo "Build containers"
             sudo docker compose --env-file .env up -d

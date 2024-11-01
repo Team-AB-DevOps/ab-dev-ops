@@ -16,8 +16,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionString=Server=database-container;Database=devops_db;User=root;Password=${MYSQL_PASSWORD};SslMode=None;
       - ASPNETCORE_URLS=http://0.0.0.0:8080;
-      - JWT_KEY=d6b3dbd74df79c21f57d64de24ac1f0855941d19e7deb6d6d4d500f6dab077b7;
-      - WEATHER_API_KEY=56bf961a0ee5487285573509242009
+      - JWT_KEY=${JWT_KEY};
+      - WEATHER_API_KEY=${WEATHER_KEY}
     depends_on:
       product.db:
         condition: service_healthy
