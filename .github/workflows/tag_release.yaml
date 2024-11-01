@@ -62,6 +62,15 @@ jobs:
           source: "docker-compose.yml"
           target: "~/production"
 
+      - name: scp nginx.conf to VM
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.VM_IP_ADDRESS }}
+          username: ${{ vars.VM_USER }}
+          key: ${{ secrets.VM_PRIVATE_KEY }}
+          source: "nginx.conf"
+          target: "~/production"
+
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.0.3
         env:
