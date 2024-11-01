@@ -127,6 +127,7 @@ public class UserTests
 		// Arrange
 		var userInDb = new User
 		{
+			Id = 56,
 			Email = "James@gmail.com",
 			Username = "James",
 			Password = "CorrectPw",
@@ -146,6 +147,7 @@ public class UserTests
 		var response = Assert.IsType<TokenUserResponseDto>(createdResult.Value);
 		Assert.Equal(requestDto.Username, response.User.Username);
 		Assert.Equal(userInDb.Email, response.User.Email);
+		Assert.Equal(userInDb.Id, response.User.Id);
 		Assert.NotNull(response.Token);
 	}
 
