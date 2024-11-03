@@ -106,7 +106,7 @@ public class UserController : ControllerBase
 
         if (!changePasswordRequestRequest.NewPassword.Equals(changePasswordRequestRequest.NewPassword2))
         {
-            return BadRequest("Passwords are not matching");
+            return BadRequest("New passwords do not match");
         }
 
         var hashedPassword = _passwordHasher.Hash(changePasswordRequestRequest.NewPassword);
