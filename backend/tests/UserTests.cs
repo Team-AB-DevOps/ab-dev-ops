@@ -163,4 +163,73 @@ public class UserTests
 		// Assert
 		Assert.IsType<BadRequestObjectResult>(result.Result);
 	}
+
+	[Fact]
+	public async Task Changing_Password_Not_Matching_Current_Password_Should_Return_Bad_Request()
+	{
+		// Arrange
+		var userInDb = new User
+		{
+			Id = 1,
+			Email = "James@gmail.com",
+			Username = "James",
+			Password = "CorrectPw",
+		};
+		var changePasswordRequest = new ChangePasswordRequestDto("WrongPw", "NewPw", "NewPw");
+
+		_userRepositoryMock.GetById(userInDb.Id).Returns(userInDb);
+		_passwordHasherMock.Verify(userInDb.Password, changePasswordRequest.CurrentPassword).Returns(false);
+
+		// Act
+		var result = await _userController.ChangePassword(changePasswordRequest, userInDb.Id);
+
+		// Assert
+		Assert.IsType<BadRequestObjectResult>(result);
+	}
+
+	[Fact]
+	public async Task Changing_Password_Matching_Current_Password_Should_Return_No_Content()
+	{
+		// Arrange
+		var userInDb = new User
+		{
+			Id = 1,
+			Email = "James@gmail.com",
+			Username = "James",
+			Password = "CorrectPw",
+		};
+		var changePasswordRequest = new ChangePasswordRequestDto("CorrectPw", "NewPw", "NewPw");
+
+		_userRepositoryMock.GetById(userInDb.Id).Returns(userInDb);
+		_passwordHasherMock.Verify(userInDb.Password, changePasswordRequest.CurrentPassword).Returns(true);
+
+		// Act
+		var result = await _userController.ChangePassword(changePasswordRequest, userInDb.Id);
+
+		// Assert
+		Assert.IsType<NoContentResult>(result);
+	}
+
+	[Fact]
+	public async Task Changing_Password_New_Passwords_Are_Not_Identical_Return_Bad_Request()
+	{
+		// Arrange
+		var userInDb = new User
+		{
+			Id = 1,
+			Email = "James@gmail.com",
+			Username = "James",
+			Password = "CorrectPw",
+		};
+		var changePasswordRequest = new ChangePasswordRequestDto("CorrectPw", "NewPw", "NewPw1");
+
+		_userRepositoryMock.GetById(userInDb.Id).Returns(userInDb);
+		_passwordHasherMock.Verify(userInDb.Password, changePasswordRequest.CurrentPassword).Returns(true);
+
+		// Act
+		var result = await _userController.ChangePassword(changePasswordRequest, userInDb.Id);
+
+		// Assert
+		Assert.IsType<BadRequestObjectResult>(result);
+	}
 }

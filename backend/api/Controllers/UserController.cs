@@ -84,4 +84,36 @@ public class UserController : ControllerBase
 
 		return Ok(response);
 	}
+
+	[Route("users/{id:int}")]
+	[HttpPatch]
+	public async Task<ActionResult> ChangePassword([FromBody] ChangePasswordRequestDto changePasswordRequestRequest, int id)
+	{
+		var userInDb = await _userRepository.GetById(id);
+
+		if (userInDb == null)
+		{
+			return BadRequest("User not found");
+		}
+
+		var matchingPassword = _passwordHasher.Verify(userInDb.Password, changePasswordRequestRequest.CurrentPassword);
+
+		if (!matchingPassword)
+		{
+			return BadRequest("Current password is incorrect");
+		}
+
+		if (!changePasswordRequestRequest.NewPassword.Equals(changePasswordRequestRequest.NewPassword2))
+		{
+			return BadRequest("New passwords do not match");
+		}
+
+		var hashedPassword = _passwordHasher.Hash(changePasswordRequestRequest.NewPassword);
+
+		userInDb.Password = hashedPassword;
+
+		await _userRepository.SaveChangesAsync();
+
+		return NoContent();
+	}
 }
