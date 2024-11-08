@@ -1,54 +1,49 @@
 import fs from "fs";
 import { load } from "cheerio";
-import { connection } from "./database.js";
 
-const URL = "https://www.proshop.dk";
+async function scrape(scrapeUrl, endpoints) {
+    const products = [];
+    for (const endpoint of endpoints) {
+        let page = 1;
+        let tempTitle = "";
 
-const response = await fetch(URL + "/Gaming-baerbar");
-const result = await response.text();
-fs.writeFileSync("index.html", result);
+        while (true) {
+            let breakloop = false;
+            const response = await fetch(scrapeUrl + `/${endpoint}?pn=${page}`);
+            const result = await response.text();
 
-const htmlPageString = fs.readFileSync("index.html").toString();
+            const $ = load(result);
 
-const $ = load(htmlPageString);
+            if ($("#products [product]").length === 0) {
+                break;
+            }
 
-const products = []; // Array to store product information
+            $("#products [product]").each((index, element) => {
+                const title = $(element).find(".site-product-link h2").text();
+                const content = $(element).find(".site-product-link").text();
+                const url = scrapeUrl.concat($(element).find(".site-product-link").attr("href"));
+                const language = "dk";
 
-$("#products [product]").each((index, element) => {
-    const title = $(element).find(".site-product-link h2").text();
-    const content = $(element).find(".site-product-link").text();
-    const url = URL.concat($(element).find(".site-product-link").attr("href"));
-    const language = "dk";
+                if (tempTitle === title) {
+                    breakloop = true;
+                    return false;
+                }
 
-    products.push({ title, content, url, language });
-});
+                if (index === 0) {
+                    tempTitle = title;
+                }
 
-// Write the products array to a JSON file
-fs.writeFileSync("products.json", JSON.stringify(products, null, 2));
+                products.push({ title, content, url, language });
+            });
 
-// Read and parse the JSON file
-const productsData = JSON.parse(fs.readFileSync("products.json", "utf-8"));
+            if (breakloop) {
+                break;
+            }
 
-// Prepare an array to hold the values for each product
-const values = productsData.map((product) => [product.title, product.content, product.url, product.language]);
-
-// Define the SQL query for a bulk insert
-const query = `
-    INSERT INTO pages (title, content, url, language)
-    VALUES ?
-    ON DUPLICATE KEY UPDATE
-        title = VALUES(title),
-        content = VALUES(content),
-        language = VALUES(language)
-`;
-
-try {
-    // Perform the bulk insert
-    await connection.query(query, [values]);
-    console.log("All products have been successfully inserted.");
-} catch (error) {
-    console.error("Error during bulk insert:", error);
-} finally {
-    // Close the database connection
-    await connection.end();
+            page++;
+        }
+    }
+    return products;
 }
+
+export { scrape };
