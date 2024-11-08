@@ -1,9 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Models.Entities;
 
 [Table("pages")]
+[Index(nameof(Title), Name = "Index_Title")]
 public class Page
 {
 	[Key, DatabaseGenerated((DatabaseGeneratedOption.None))]
