@@ -3,7 +3,9 @@ import { insertIntoDatabase } from "./dbInserter.js";
 const { app } = require("@azure/functions");
 
 const URL = "https://www.proshop.dk";
-const ENDPOINTS = ["Gaming-baerbar", "Gaming-PC", "Spil-Gaming"];
+const ENDPOINTS = ["Gaming-baerbar", "Gaming-PC"];
+
+//, "Spil-Gaming"
 
 async function main() {
     const products = await scrape(URL, ENDPOINTS);
@@ -11,7 +13,7 @@ async function main() {
 }
 
 app.timer("timerTrigger1", {
-    schedule: "*/5 * * * *",
+    schedule: "*/2 * * * *",
     handler: async (myTimer, context) => {
         context.log("Timer function processed request.");
         await main();
