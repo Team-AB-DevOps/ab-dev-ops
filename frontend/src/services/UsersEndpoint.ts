@@ -36,7 +36,7 @@ class UsersEndpoint {
 	static async UpdatePassword(id: number, body: TChangePasswordRequest) {
 		const resp = await new ApiClient().Patch<null, TChangePasswordRequest>(`api/users/${id}`, body);
 
-		if (resp.error) {
+		if (!resp.ok) {
 			throw new Error(resp.error)
 		}
 	}
