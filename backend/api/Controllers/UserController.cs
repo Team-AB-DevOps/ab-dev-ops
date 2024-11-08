@@ -52,7 +52,7 @@ public class UserController : ControllerBase
 		};
 
 		await _userRepository.CreateUser(newUser);
-		var userDto = new UserResponseDto(newUser.Username, newUser.Email);
+		var userDto = new UserResponseDto(newUser.Username, newUser.Email, newUser.Id);
 
 		return CreatedAtAction(nameof(Login), userDto);
 	}
@@ -78,7 +78,7 @@ public class UserController : ControllerBase
 
 		var token = _jwtGenerator.GenerateToken(userInDb);
 
-		var userDto = new UserResponseDto(userInDb.Username, userInDb.Email);
+		var userDto = new UserResponseDto(userInDb.Username, userInDb.Email, userInDb.Id);
 
 		var response = new TokenUserResponseDto(token, userDto);
 

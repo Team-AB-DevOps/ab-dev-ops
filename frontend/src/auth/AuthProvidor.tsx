@@ -56,9 +56,9 @@ function AuthProvidor(props: AuthProps) {
 				}
 
 				const payload = token.split(".")[1];
-				const { username, email } = JSON.parse(atob(payload));
+				const { username, email, id } = JSON.parse(atob(payload));
 
-				setUser({ email, username });
+				setUser({ email, username, id: Number(id) });
 				setIsAuthenticated(true);
 				navigate("/");
 			} catch (err) {

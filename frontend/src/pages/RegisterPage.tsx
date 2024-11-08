@@ -72,7 +72,7 @@ function RegisterPage() {
 				</div>
 				<div className="flex flex-col gap-3 justify-center items-center">
 					<Button onClick={handleSubmit}>Sign up</Button>
-					{errorMessage ?? (
+					{errorMessage && (
 						<div>
 							<p className="text-red-800">{errorMessage}</p>
 						</div>

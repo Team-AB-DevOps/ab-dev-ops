@@ -4,12 +4,14 @@ import Button from "@/components/core/Button";
 import PagesEndpoint from "@/services/PagesEndpoint";
 import IPage from "@/models/Page";
 import { useLocation, useSearchParams } from "react-router-dom";
+import useAuth from "@/auth/UseAuth";
 
 export default function SearchPage() {
 	const { redirected } = useLocation().state || false;
 	const [searchParams] = useSearchParams();
 	const [searchValue, setSearchValue] = React.useState(searchParams.get("q") ?? "");
 	const [pages, setPages] = React.useState<IPage[]>([]);
+	const auth = useAuth();
 
 	const handleFetch = () => {
 		PagesEndpoint.getPages(searchValue)
@@ -36,8 +38,13 @@ export default function SearchPage() {
 
 	return (
 		<>
-			{redirected && <div className="bg-teal-300 p-1 border text-sm mb-5">You were logged in</div>}
-			<div className="flex gap-2 justify-center items-center">
+			{redirected && <div className="bg-teal-300 p-1 border text-sm mb-1 mx-56">You were logged in</div>}
+			{auth.isAuthenticated && (
+				<div className="bg-red-300 p-1 border text-sm mb-5 mx-56">
+					<span className="font-bold">IMPORTANT: </span>Please change your password if your account was registered before 1. November 2024
+				</div>
+			)}
+			<div className="flex gap-2 justify-center items-center mt-5">
 				<SearchInput onKeyDown={handleKeyDown} className="w-52" value={searchValue} onChange={(e) => setSearchValue(e.target.value)} />
 				<Button onClick={handleFetch}>Search</Button>
 			</div>
