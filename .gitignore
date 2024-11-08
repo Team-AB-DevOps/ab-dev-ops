@@ -498,4 +498,4 @@ $RECYCLE.BIN/
 
 .env
 megalinter-reports
-
+.vscode

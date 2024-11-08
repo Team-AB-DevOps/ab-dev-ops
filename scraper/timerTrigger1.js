@@ -7,16 +7,16 @@ const ENDPOINTS = ["Gaming-baerbar", "Gaming-PC"];
 
 //, "Spil-Gaming"
 
-async function main() {
-    const products = await scrape(URL, ENDPOINTS);
-    await insertIntoDatabase(products);
-}
-
 app.timer("timerTrigger1", {
     schedule: "*/2 * * * *",
     handler: async (myTimer, context) => {
-        context.log("Timer function processed request.");
-        await main();
+        try {
+            const products = await scrape(URL, ENDPOINTS);
+            await insertIntoDatabase(products);
+            context.log("Timer function processed request.");
+        } catch (error) {
+            console.log("something went wrong: " + error);
+        }
     },
 });
 
