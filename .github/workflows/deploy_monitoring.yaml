@@ -20,8 +20,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          sparse-checkout: "monitoring"
 
       - name: scp docker-compose.yml to VM
         uses: appleboy/scp-action@v0.1.7
@@ -29,7 +27,7 @@ jobs:
           host: ${{ vars.MONITORING_VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
-          source: "docker-compose.yml"
+          source: "./monitoring/docker-compose.yml"
           target: "~/monitoring"
 
       - name: scp nginx.conf to VM
@@ -38,7 +36,7 @@ jobs:
           host: ${{ vars.MONITORING_VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
-          source: "nginx.conf"
+          source: "./monitoring/nginx.conf"
           target: "~/monitoring"
 
       - name: scp prometheus.yml to VM
@@ -47,7 +45,7 @@ jobs:
           host: ${{ vars.MONITORING_VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
-          source: "prometheus.yml"
+          source: "./monitoring/prometheus.yml"
           target: "~/monitoring"
 
   execute-commands:
