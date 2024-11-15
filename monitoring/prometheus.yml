@@ -10,7 +10,7 @@ rule_files:
   - "prometheus.rules.yml"
 
 scrape_configs:
-  - job_name: "Deployed-Droplet"
+  - job_name: "App VM metrics"
 
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
@@ -18,12 +18,10 @@ scrape_configs:
     static_configs:
       - targets: ["67.207.73.30:9100"]
 
-  # - job_name:       'whoknows-app'
+  - job_name: "MyASPNETApp backend metrics"
+    scrape_interval: 5s # Poll every 5 seconds for a more responsive demo.
 
-  #   # Override the global default and scrape targets from this job every 5 seconds.
-  #   scrape_interval: 5s
+    metrics_path: "/api/metrics" # Specify the /api/metrics path for scraping
 
-  #   static_configs:
-  #     - targets: ['whoknows_flask:8080']
-  #       labels:
-  #         group: 'production'
+    static_configs:
+      - targets: ["https://abdevops.dk"]

@@ -108,7 +108,10 @@ builder
 	.Services.AddOpenTelemetry()
 	.WithMetrics(builder =>
 	{
-		builder.AddPrometheusExporter();
+		builder.AddPrometheusExporter(options =>
+		{
+			options.ScrapeEndpointPath = "/api/metrics";
+		});
 
 		builder.AddMeter("Microsoft.AspNetCore.Hosting", "Microsoft.AspNetCore.Server.Kestrel");
 		builder.AddView(
