@@ -7,15 +7,12 @@ permissions:
   contents: write
   checks: write
 
-# on:
-#   push:
-#     tags:
-#       - "*"
-#     paths:
-#       - "monitoring/**"
-
 on:
-  pull_request:
+  push:
+    tags:
+      - "*"
+    paths:
+      - "monitoring/**"
 
 jobs:
   scp-files:
