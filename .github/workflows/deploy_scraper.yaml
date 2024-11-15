@@ -24,10 +24,9 @@ jobs:
     steps:
       - name: "Checkout GitHub Action"
         uses: actions/checkout@v4
-      
-      - name: "cd to directory"
-        shell: bash
-        run: "cd scraper2"
+        with:
+          sparse-checkout: |
+            scraper2
 
       - name: Setup Node ${{ env.NODE_VERSION }} Environment
         uses: actions/setup-node@v4
