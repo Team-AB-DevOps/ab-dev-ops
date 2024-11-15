@@ -12,7 +12,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - "GF_PATHS_CONFIG=custom.ini"
+      - "GF_PATHS_CONFIG=./custom.ini"
 
   # Nginx Service
   nginx:
