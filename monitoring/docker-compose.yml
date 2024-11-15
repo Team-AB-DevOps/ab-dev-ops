@@ -11,6 +11,8 @@ services:
     image: grafana/grafana:10.2.4
     ports:
       - "3000:3000"
+    environment:
+      - "GF_PATHS_CONFIG=custom.ini"
 
   # Nginx Service
   nginx:
