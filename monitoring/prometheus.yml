@@ -1,27 +1,27 @@
 global:
-    scrape_interval: 15s # By default, scrape targets every 15 seconds.
-    evaluation_interval: 15s # Evaluate rules every 15 seconds.
+  scrape_interval: 15s # By default, scrape targets every 15 seconds.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds.
 
-    # Attach these extra labels to all timeseries collected by this Prometheus instance.
-    external_labels:
-        monitor: "codelab-monitor"
+  # Attach these extra labels to all timeseries collected by this Prometheus instance.
+  external_labels:
+    monitor: "codelab-monitor"
 
 rule_files:
-    - "prometheus.rules.yml"
+  - "prometheus.rules.yml"
 
 scrape_configs:
-    - job_name: "App VM metrics"
+  - job_name: "App VM metrics"
 
-      # Override the global default and scrape targets from this job every 5 seconds.
-      scrape_interval: 5s
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
 
-      static_configs:
-          - targets: ["67.207.73.30:9100"]
+    static_configs:
+      - targets: ["67.207.73.30:9100"]
 
-    - job_name: "MyASPNETApp backend metrics"
-      scrape_interval: 5s # Poll every 5 seconds for a more responsive demo.
+  - job_name: "MyASPNETApp backend metrics"
+    scrape_interval: 5s # Poll every 5 seconds for a more responsive demo.
 
-      metrics_path: "/api/metrics" # Specify the /api/metrics path for scraping
+    metrics_path: "/api/metrics" # Specify the /api/metrics path for scraping
 
-      static_configs:
-          - targets: ["https://abdevops.dk"]
+    static_configs:
+      - targets: ["https://abdevops.dk"]

@@ -1,30 +1,28 @@
 services:
-    prometheus:
-        image: prom/prometheus
-        container_name: prometheus
-        volumes:
-            - ./prometheus.yml:/etc/prometheus/prometheus.yml
-        ports:
-            - "9090:9090"
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
 
-    grafana:
-        image: grafana/grafana:10.2.4
-        ports:
-            - "3000:3000"
+  grafana:
+    image: grafana/grafana:10.2.4
+    ports:
+      - "3000:3000"
 
-    # Nginx Service
-    nginx:
-        image: nginx:latest
-        container_name: nginx-monitor-container
-        ports:
-            - "80:80"
-            - "443:443"
-        volumes:
-            - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the custom Nginx config
-            - /etc/letsencrypt/live/monitoring.abdevops.dk/:/etc/letsencrypt/live/monitoring.abdevops.dk
-            - /etc/letsencrypt/archive/monitoring.abdevops.dk/:/etc/letsencrypt/archive/monitoring.abdevops.dk
-        depends_on:
-            - prometheus
-            - grafana
-
- 
+  # Nginx Service
+  nginx:
+    image: nginx:latest
+    container_name: nginx-monitor-container
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf # Mount the custom Nginx config
+      - /etc/letsencrypt/live/monitoring.abdevops.dk/:/etc/letsencrypt/live/monitoring.abdevops.dk
+      - /etc/letsencrypt/archive/monitoring.abdevops.dk/:/etc/letsencrypt/archive/monitoring.abdevops.dk
+    depends_on:
+      - prometheus
+      - grafana
