@@ -81,6 +81,11 @@ class ApiClient {
 
 	private async handleResponse<T>(rawResponse: Response): Promise<ApiResponse<T>> {
 		const apiResponse = new ApiResponse<T>(rawResponse.status);
+
+		if (rawResponse.status === 204) {
+			return apiResponse;
+		}
+
 		const body = await rawResponse.json()
 
 		if (rawResponse.ok) {
