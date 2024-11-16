@@ -28,7 +28,7 @@ jobs:
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
           source: "./monitoring/docker-compose.yml"
-          target: "~/monitoring"
+          target: "."
 
       - name: scp nginx.conf to VM
         uses: appleboy/scp-action@v0.1.7
@@ -37,7 +37,7 @@ jobs:
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
           source: "./monitoring/nginx.conf"
-          target: "~/monitoring"
+          target: "."
 
       - name: scp prometheus.yml to VM
         uses: appleboy/scp-action@v0.1.7
@@ -46,7 +46,7 @@ jobs:
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
           source: "./monitoring/prometheus.yml"
-          target: "~/monitoring"
+          target: "."
 
   execute-commands:
     name: Executing remote SSH commands
@@ -55,16 +55,25 @@ jobs:
     steps:
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          USERNAME: ${{ secrets.GRAFANA_USERNAME }}
+          PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
         with:
           host: ${{ vars.MONITORING_VM_IP_ADDRESS }}
           username: ${{ vars.VM_USER }}
           key: ${{ secrets.VM_PRIVATE_KEY }}
+          envs: USERNAME,PASSWORD
           script: |
             echo "cd to working directory"
-            cd ./monitoring  
+            cd ./monitoring
 
             echo "Ensure Docker is installed"
             docker --version
+
+            echo "Insert variables for Grafana"
+            echo "[security]" > custom.ini
+            echo "admin_user=$USERNAME" >> custom.ini
+            echo "admin_password=$PASSWORD" >> custom.ini
 
             echo "Remove existing containers"
             sudo docker compose down

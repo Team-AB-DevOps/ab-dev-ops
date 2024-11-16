@@ -24,4 +24,4 @@ scrape_configs:
     metrics_path: "/api/metrics" # Specify the /api/metrics path for scraping
 
     static_configs:
-      - targets: ["https://abdevops.dk"]
+      - targets: ["abdevops.dk"]

@@ -9,8 +9,14 @@ services:
 
   grafana:
     image: grafana/grafana:10.2.4
+    restart: unless-stopped
     ports:
       - "3000:3000"
+    environment:
+      - GF_PATHS_CONFIG=/etc/grafana/custom.ini
+    volumes:
+      - ./custom.ini:/etc/grafana/custom.ini
+      - GRAFANA_STORAGE:/var/lib/grafana
 
   # Nginx Service
   nginx:
@@ -26,3 +32,6 @@ services:
     depends_on:
       - prometheus
       - grafana
+
+volumes:
+  GRAFANA_STORAGE:
