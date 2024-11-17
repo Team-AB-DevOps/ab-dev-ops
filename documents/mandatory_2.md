@@ -29,7 +29,7 @@ Tilfælde, hvor vi har valgt at ignorere eller afvise værktøjernes anvisninger
 
 ## Monitoring Realization
 
-I forlængelse af at have opsat monitorering af vores API og Linux server vha. Prometheus og Grafana bed vi mærke til, at `GET /api/weather` endpoint, som kommunikerer med et eksternt API, havde en overvejende høj responstid op til 10 sekunder(!). 
+I forlængelse af at have opsat monitorering af vores API og Linux server vha. Prometheus og Grafana bed vi mærke til, at `GET /api/weather` endpoint, som kommunikerer med et eksternt API, havde en overvejende høj responstid op til 10 sekunder(!).
 
 Dette har fået os til at kigge hinanden dybt i øjnene, hvorefter vi er kommet frem til, at dette må udbedres. Et 'issue' på GitHub er derfor blevet oprettet mhp. at finde en bedre ekstern weather API, der kan tilgodese vores behov for hurtig responstid.
 
