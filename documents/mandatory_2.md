@@ -15,30 +15,30 @@
 
 ## Reflect on how your group uses version control
 
-I Team AB har vi anvendt `git` som version-styringssystem. Git giver os en række beføjelser såsom at udvikle features parralelt i hver sin `branch` og give os et historie overblik over `commits`. Derudover har vi anvendt git til at redigere eksisterende commits vha. `git rebase -i` mhp. at ændre commitindholdet eller -besked, squashe et commit med et andet eller at fjerne det. Kommandoen `git rebase -i` giver os en enestående mulighed for, at sætte en råd tråd gennem samtlige commits fra en ende til en anden.
+In Team AB, we have used `git` as our version control system. Git gives us a number of benefits such as developing features in parallel in seperate `branch`'es and provides us with an overview of previous `commits`. In addition, we have used git to edit existing commits using `git rebase -i` to change the commit content or message, squash a commit with another, or remove it entirely. The `git rebase -i' command gives us a unique opportunity to establish a straight line through all our commits from beginning to the end.
 
-For at gøre vores commits så gennemsigtige som overhovedet muligt, har vi fulgt best practices inden for git version control. Følgende er prefixes, som vi tilføjer i vores commitbesked, som varierer afhængig af commitets indhold:
+To make our commits as transparent as possible, we have followed best practices within git version control. The following are prefixes that we have added in our commit messages, which vary depending on the specific commit's content:
 
-På trods af `git`'s fordele er det mennesker af kød og blod der skal overholde de regelsæt, vi i gruppen har sat for os selv. Og under pressede udviklingsperioder, har vi været dårlige til at fastholde vores commit-disciplin, hvorfor der jævnligt kan opdages commits med tvivlsomme beskeder.
+Despite `git`'s advantages, it is fallible developers who have to comply with the rules that we in the group have set for ourselves. And during development phases with extensive pressure, we have been bad at maintaining our commit discipline, which is why commits with questionable messages can regularly be discovered in our commit history in the `main` branch.
 
 ## How are you DevOps?
 
 ## Software Quality
 
-Vi har anvendt Code Climate og SonarQube som vores software quality værktøjer mhp. at reducere smelly code, sårbarheder i vores sikkerhed og repetetiv kode.
+We have used Code Climate and SonarQube as our software quality tools to reduce smelly code, vulnerabilities in our security and eliminate repetitive code.
 
-Vi var i overvejende høj grad enig med vores anvendte værktøjers forslag til forbedringer. Dette gælder repetetiv kode, hvor der ikke er blevet anvendt komponenter. Det er især tilfældet ved Login og Sign-up formularen, hvor komponenter såsom `<TextInput/>` indeholdende et `label` og `input`.
+We agreed largely with the suggested improvements of the tools we used. This applies to repetitive code where components could have been used instead. This is especially the case with the Login and Sign-up form, where components such as `<TextInput/>` containing a `label` and `input` were to be developed instead.
 
-Tilfælde, hvor vi har valgt at ignorere eller afvise værktøjernes anvisninger, har været opdatering af dependencies i legacy-kodebasen, `./whoknows_variations`, og vores database migrations i `./backend/api/Migrations` samt seeding data i `./backend/api/Data`, da SonarQube var insisteren på at fjerne falsk-positive duplikater.
+Cases where we have chosen to ignore or reject the tools' instructions have been updating dependencies in the legacy codebase, `./whoknows_variations`, and our database migrations in `./backend/api/Migrations` as well as seeding data in `./ backend/api/Data` as SonarQube was insisting on removing duplicates which were false-positives.
 
 ## Security Assessment
 
 ## Monitoring Realization
 
-I forlængelse af at have opsat monitorering af vores API og Linux server vha. Prometheus og Grafana bed vi mærke til, at `GET /api/weather` endpoint, som kommunikerer med et eksternt API, havde en overvejende høj responstid op til 10 sekunder(!).
+Having set up monitoring of our API and Linux server using Prometheus and Grafana, we noticed that the `GET /api/weather' endpoint, which communicates with an external API, had a predominantly high response time which could reach up to 10 seconds(!).
 
-Dette har fået os til at kigge hinanden dybt i øjnene, hvorefter vi er kommet frem til, at dette må udbedres. Et 'issue' på GitHub er derfor blevet oprettet mhp. at finde en bedre ekstern weather API, der kan tilgodese vores behov for hurtig responstid.
+We came to the conclusion that this must be rectified. An 'issue' on GitHub has therefore been created to find a better external weather API that can meet our need for fast response times.
 
-Hvorfor er hurtig responstid vigtig? [Amazon har udarbejdet en undersøgelse](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales/), der konkluderer, at hver 100ms responstid koster dem 1 pct. i salg. Vores beslutning skal ses med dette in mente.
+Why are fast response times important? [Amazon found out](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales/) that every 100ms of latency cost them 1% in sales. With that in mind, we reached the above mentioned conclusion.
 
 ### Made by Ali & Brian, 17/11/2024
