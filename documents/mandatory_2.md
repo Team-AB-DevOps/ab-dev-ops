@@ -15,6 +15,12 @@
 
 ## Reflect on how your group uses version control
 
+I Team AB har vi anvendt `git` som version-styringssystem. Git giver os en række beføjelser såsom at udvikle features parralelt i hver sin `branch` og give os et historie overblik over `commits`. Derudover har vi anvendt git til at redigere eksisterende commits vha. `git rebase -i` mhp. at ændre commitindholdet eller -besked, squashe et commit med et andet eller at fjerne det. Kommandoen `git rebase -i` giver os en enestående mulighed for, at sætte en råd tråd gennem samtlige commits fra en ende til en anden.
+
+For at gøre vores commits så gennemsigtige som overhovedet muligt, har vi fulgt best practices inden for git version control. Følgende er prefixes, som vi tilføjer i vores commitbesked, som varierer afhængig af commitets indhold:
+
+På trods af `git`'s fordele er det mennesker af kød og blod der skal overholde de regelsæt, vi i gruppen har sat for os selv. Og under pressede udviklingsperioder, har vi været dårlige til at fastholde vores commit-disciplin, hvorfor der jævnligt kan opdages commits med tvivlsomme beskeder.
+
 ## How are you DevOps?
 
 ## Software Quality
