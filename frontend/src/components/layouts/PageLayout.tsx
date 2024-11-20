@@ -8,10 +8,10 @@ type Props = {
 
 export default function PageLayout({ children }: Props) {
 	return (
-		<>
+		<div className="min-h-screen">
 			<Header />
 			<main className={"m-8"}>{children}</main>
 			<Footer />
-		</>
+		</div>
 	);
 }
