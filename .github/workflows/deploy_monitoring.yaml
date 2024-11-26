@@ -7,17 +7,39 @@ permissions:
   contents: write
   checks: write
 
-on:
-  push:
-    tags:
-      - "*"
-    paths:
-      - "monitoring/**"
+# on:
+#   push:
+#     tags:
+#       - "*"
+
+
+on: 
+  pull_request:
 
 jobs:
+  check-monitoring-changes:
+    name: Check for changes in monitoring directory
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get changed files in the monitoring folder
+        id: monitoring_changes
+        uses: tj-actions/changed-files@v45
+        with:
+          files: monitoring/**
+        
+      - name: Fail if no changes in monitoring directory
+        if: steps.monitoring_changes.outputs.any_changed == 'false'
+        run: echo "No changes in monitoring directory. Ending workflow gracefully."
+        continue-on-error: true
+          
+
   scp-files:
     name: Scp necessary files to monitoring VM
     runs-on: ubuntu-latest
+    needs: check-monitoring-changes
+    if: needs.check-monitoring-changes.result == 'success'
     steps:
       - uses: actions/checkout@v4
 
@@ -52,6 +74,7 @@ jobs:
     name: Executing remote SSH commands
     runs-on: ubuntu-latest
     needs: scp-files
+    if: needs.scp-files.result == 'success'
     steps:
       - name: Executing remote SSH commands
         uses: appleboy/ssh-action@v1.0.3
