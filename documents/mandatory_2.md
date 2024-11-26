@@ -1,6 +1,5 @@
 # Mandatory II - Ali and Brian
 
-
 **Reflect on how your group uses version control**
 
 **How are you DevOps?**
@@ -26,24 +25,21 @@ Despite `git`'s advantages, it is nevertheless fallible developers who have to c
 
 ## How are you DevOps?
 
-In Team AB we have strived after being DevOps since the beginning of the course. Generally speaking, DevOps is a specific culture within a developing team, but Devops also includes a set of technical practices.
+In Team AB we have strived for being DevOps since the beginning of the course. Generally speaking, DevOps is a specific culture within a developing team, but Devops also includes a set of technical practices, which we will discuss.
 
-An integral part of DevOps technical practices is Continuous Integration/Delivery and automation. In Team AB we have implemented both practices to deliver our product to the costumer quick and reliably using GitHub Action which supplied us with automated pipelines. Every push to a branch triggers a workflow, which builds and tests the code. We then manually decide when to push the main branch to production, by creating a new tag release, which triggers our deployment workflow.
+An integral part of DevOps technical practices is Continuous Integration/Delivery and automation. In Team AB we have implemented both practices to deliver our product to the costumer quickly and reliably using GitHub Actions which supplied us with automated pipelines. Every push to a branch triggers a workflow, which builds and tests the code. We then manually decide when to push the main branch to production, by creating a new tag release, which triggers our deployment workflow.
 
-Another technical practice is continuous improvement. To be able to do so, we have utilized smokescreen tests running reguarly each hour to ping our API endpoints to check if changes can be made to improve our system to meet demand. On top of that, we have setup a monitoring system using Prometheus with Grafana, which gives us an overall view of the system utilization of the hosted server and http response statutes for each indiviual endpoint in our system. In doing so, we can quickly recognize when a specific endpoint or our whole API is failing or not being able to meet demand.
+Another technical practice is continuous improvement. To be able to do so, we have utilized smokescreen tests running regularly each hour, to ping our API endpoints to check if changes can be made to improve our system to meet demand. On top of that, we have set up a monitoring system using Prometheus with Grafana, which gives us an overall view of the system utilization of the hosted server and http response statuses for each indiviual endpoint in our system. In doing so, we can quickly recognize when a specific endpoint or our whole API is failing or not being able to meet demand.
 
 In regards of the cultural practices, safety thinking [psykologisk sikkerhed] is paramount. In Team AB, safety thinking was an easy and natural thing to implement. Discussions and arguments could easily take place without fear of 'losing face' or being criticized. This is largely due to Team AB consisting of two developers, which have known eachother since the beginning of our computer science degree.
 
-In Team AB we also have some shortcomings such as lack of resilience engineering and swarming to fix the system and infrastructure as code.
+In Team AB we also have some shortcomings, where we were not being DevOps, such as lack of resilience engineering, swarming and infrastructure as code.
 
-We have not focused on designing our system that can easily recover and continue functioning during failures, aka. Resilience Engineering. We lack backups of important parts of the system (such as the database), so in case of a critical failure of the cloud container, there is no way to quickly spin up a new one with the data intact. To improve this, we would have to take regular backups of the data, and keep them at seperate locations, so if one fails, it can easily be recoved. This would require us spend additional money, which is above the scope of this elective and our pockets.
+We have not focused on designing a system that can easily recover and continue functioning during failures, aka. Resilience Engineering. We lack backups of important parts of the system (such as the database), so in case of a critical failure of the cloud container, there is no way to quickly spin up a new one with the data intact. To improve this, we would have to take regular backups of the data, and keep them at seperate locations, so if one fails, it can easily be recovered. This would require us to spend additional money, which is above the scope of this elective and beyond our pockets.
 
-Currently, our deployed services have been manually created and maintained. This may cause several issue should our deployment fail and re-deployment is required. Doing so manually would take us several days to get everything back as before, which generally speaking is fatal for our costumer. Infrastructure as code would solve this issue and be able to deploy our systems in no time resulting in a short downtime for our customer. Today, what keeps us from transfering to infrastrucure as code is the amount of time it would take. Today, our deployment server takes shape as a highly customized 'pet' instead of a generic 'cattle', which is easily replaceable. Remaking our deployment server to fit the latter definition is the first step towards automating and generalizing our infrastrucure as code in later iterations.    
+Currently, our deployed services have been manually created and maintained. This may cause several issue should our deployment fail and re-deployment is required. Doing so manually would take us several days to get everything back as before, which generally speaking is fatal for our costumer. Infrastructure as code would solve this issue and be able to deploy our systems in no time resulting in a short downtime for our customer. Today, what keeps us from transfering to infrastrucure as code is the amount of time it would take. Today, our deployment server takes shape as a highly customized 'pet' instead of a generic 'cattle', which is easily replaceable. Remaking our deployment server to fit the latter definition is the first step towards automating and generalizing our infrastrucure as code should we decide to do so in later iterations.    
 
-Mangel på swarming for at løse problemer (grundet forskellige skemaer)
-Due to different schedules, it was sometimes not possible to help each other with tasks that were causing issues (aka. swarming). Meaning the individual had 
-erugif o
-
+Due to different schedules, it was occasionally not possible to help each other with tasks that were causing issues (aka. swarming). This would result in Team AB having to solve issues individually, which meant it might have taken longer than if it had been swarmed. This is an obvious disadvantage of being a two-person team, which can only be solved by being a larger development team.
 
 ## Software Quality
 
