@@ -34,7 +34,7 @@ We have used Code Climate and SonarQube as our software quality tools to reduce 
 
 We agreed largely with the suggested improvements of the tools we used. This applies to repetitive code where components could have been used instead. This is especially the case with the Login and Sign-up form, where components such as `<TextInput/>` containing a `label` and `input` were to be developed instead.
 
-Cases where we have chosen to ignore or reject the tools' instructions have been updating dependencies in the legacy codebase, `./whoknows_variations`, and our database migrations in `./backend/api/Migrations` as well as seeding data in `./ backend/api/Data` as SonarQube was insisting on removing duplicates which were false-positives.
+Cases where we have chosen to ignore or reject the tools' instructions have been updating dependencies in the legacy codebase, `./whoknows_variations`, and our database migrations in `./backend/api/Migrations` as well as seeding data in `./backend/api/Data` as SonarQube was insisting on removing duplicates and repetitive code which were false-positive.
 
 ## Security Assessment
 
