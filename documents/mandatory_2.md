@@ -42,8 +42,8 @@ Cases where we have chosen to ignore or reject the tools' instructions have been
 
 Having set up monitoring of our API and Linux server using Prometheus and Grafana, we noticed that the `GET /api/weather' endpoint, which communicates with an external API, had a predominantly high response time which could reach up to 10 seconds(!).
 
-We came to the conclusion that this must be rectified. An 'issue' on GitHub has therefore been created to find a better external weather API that can meet our need for fast response times.
+We came to the conclusion that this must be rectified. An 'issue' on GitHub has therefore been created to find a faster external weather API that can meet our requirements for fast response times.
 
-Why are fast response times important? [Amazon found out](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales/) that every 100ms of latency cost them 1% in sales. With that in mind, we reached the above mentioned conclusion.
+Why are fast response times important? [Amazon found out](https://www.gigaspaces.com/blog/amazon-found-every-100ms-of-latency-cost-them-1-in-sales/) that every 100ms of latency cost them 1% in sales. With that in mind, we set ourselves to fix the above-mentioned issue.
 
-### Made by Ali & Brian, 17/11/2024
+### Made by Ali & Brian, 26/11/2024
