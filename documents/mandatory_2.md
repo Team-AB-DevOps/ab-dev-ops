@@ -7,8 +7,6 @@
 
 **Software Quality**
 
-**Security Assessment**
-
 **Monitoring Realization**
 
 ---
@@ -28,6 +26,25 @@ Despite `git`'s advantages, it is nevertheless fallible developers who have to c
 
 ## How are you DevOps?
 
+In Team AB we have strived after being DevOps since the beginning of the course. Generally speaking, DevOps is a specific culture within a developing team, but Devops also includes a set of technical practices.
+
+An integral part of DevOps technical practices is Continuous Integration/Delivery and automation. In Team AB we have implemented both practices to deliver our product to the costumer quick and reliably using GitHub Action which supplied us with automated pipelines. Every push to a branch triggers a workflow, which builds and tests the code. We then manually decide when to push the main branch to production, by creating a new tag release, which triggers our deployment workflow.
+
+Another technical practice is continuous improvement. To be able to do so, we have utilized smokescreen tests running reguarly each hour to ping our API endpoints to check if changes can be made to improve our system to meet demand. On top of that, we have setup a monitoring system using Prometheus with Grafana, which gives us an overall view of the system utilization of the hosted server and http response statutes for each indiviual endpoint in our system. In doing so, we can quickly recognize when a specific endpoint or our whole API is failing or not being able to meet demand.
+
+In regards of the cultural practices, safety thinking [psykologisk sikkerhed] is paramount. In Team AB, safety thinking was an easy and natural thing to implement. Discussions and arguments could easily take place without fear of 'losing face' or being criticized. This is largely due to Team AB consisting of two developers, which have known eachother since the beginning of our computer science degree.
+
+In Team AB we also have some shortcomings such as lack of resilience engineering and swarming to fix the system and infrastructure as code.
+
+We have not focused on designing our system that can easily recover and continue functioning during failures, aka. Resilience Engineering. We lack backups of important parts of the system (such as the database), so in case of a critical failure of the cloud container, there is no way to quickly spin up a new one with the data intact. To improve this, we would have to take regular backups of the data, and keep them at seperate locations, so if one fails, it can easily be recoved. This would require us spend additional money, which is above the scope of this elective and our pockets.
+
+Currently, our deployed services have been manually created and maintained. This may cause several issue should our deployment fail and re-deployment is required. Doing so manually would take us several days to get everything back as before, which generally speaking is fatal for our costumer. Infrastructure as code would solve this issue and be able to deploy our systems in no time resulting in a short downtime for our customer. Today, what keeps us from transfering to infrastrucure as code is the amount of time it would take. Today, our deployment server takes shape as a highly customized 'pet' instead of a generic 'cattle', which is easily replaceable. Remaking our deployment server to fit the latter definition is the first step towards automating and generalizing our infrastrucure as code in later iterations.    
+
+Mangel på swarming for at løse problemer (grundet forskellige skemaer)
+Due to different schedules, it was sometimes not possible to help each other with tasks that were causing issues (aka. swarming). Meaning the individual had 
+erugif o
+
+
 ## Software Quality
 
 We have used Code Climate and SonarQube as our software quality tools to reduce smelly code, vulnerabilities in our security and eliminate repetitive code.
@@ -35,8 +52,6 @@ We have used Code Climate and SonarQube as our software quality tools to reduce 
 We agreed largely with the suggested improvements of the tools we used. This applies to repetitive code where components could have been used instead. This is especially the case with the Login and Sign-up form, where components such as `<TextInput/>` containing a `label` and `input` were to be developed instead.
 
 Cases where we have chosen to ignore or reject the tools' instructions have been updating dependencies in the legacy codebase, `./whoknows_variations`, and our database migrations in `./backend/api/Migrations` as well as seeding data in `./backend/api/Data` as SonarQube was insisting on removing duplicates and repetitive code which were false-positive.
-
-## Security Assessment
 
 ## Monitoring Realization
 
