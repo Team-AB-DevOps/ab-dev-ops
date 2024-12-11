@@ -499,3 +499,4 @@ $RECYCLE.BIN/
 .env
 megalinter-reports
 
+terraform.tfvars
