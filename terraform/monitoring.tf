@@ -1,33 +1,25 @@
 # Create a new Droplet
-resource "digitalocean_droplet" "app-production" {
+resource "digitalocean_droplet" "monitoring" {
   image   = "ubuntu-24-10-x64"
-  name    = "app-production"
+  name    = "monitoring"
   region  = "fra1"
-  size    = "s-2vcpu-4gb"
-  backups = true
+  size    = "s-2vcpu-2gb"
   ssh_keys = [
     data.digitalocean_ssh_key.devops.id
   ]
-  backup_policy {
-    plan    = "weekly"
-    weekday = "TUE"
-    hour    = 8
-  }
 }
 
 # Create a reserved IP
-resource "digitalocean_reserved_ip" "app-production-ip" {
-  droplet_id = digitalocean_droplet.app-production.id
-  region     = digitalocean_droplet.app-production.region
+resource "digitalocean_reserved_ip" "monitoring-ip" {
+  droplet_id = digitalocean_droplet.monitoring.id
+  region     = digitalocean_droplet.monitoring.region
 }
 
 # Assign firewall rules
-resource "digitalocean_firewall" "app-production" {
-  name = "app-production-firewall"
-
-  depends_on = [digitalocean_droplet.app-production]
-
-  droplet_ids = [digitalocean_droplet.app-production.id]
+resource "digitalocean_firewall" "monitoring" {
+  name = "monitoring-firewall"
+  depends_on = [digitalocean_droplet.monitoring]
+  droplet_ids = [digitalocean_droplet.monitoring.id]
 
   inbound_rule {
     protocol         = "tcp"
@@ -44,18 +36,6 @@ resource "digitalocean_firewall" "app-production" {
   inbound_rule {
     protocol         = "tcp"
     port_range       = "443"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
-
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "3307"
-    source_addresses = ["0.0.0.0/0", "::/0"]
-  }
-
-  inbound_rule {
-    protocol         = "tcp"
-    port_range       = "9100"
     source_addresses = ["0.0.0.0/0", "::/0"]
   }
 
