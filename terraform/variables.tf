@@ -4,8 +4,3 @@ variable "do_token" {
   sensitive   = true
 }
 
-variable "pvt_key" {
-  description = "The private SSH key to access the droplets."
-  type        = string
-  sensitive   = true
-}
