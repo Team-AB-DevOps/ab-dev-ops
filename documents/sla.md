@@ -32,11 +32,11 @@ The Provider agrees to deliver a full-stack search engine solution, including bu
 ### 3.1 Service Availability (Uptime Guarantee)
 The Provider guarantees the Full-Stack Search Engine will be available at least **99.9% of the time**, calculated on a monthly basis.
 
-#### Measurement:
+#### Measurement
 - **Availability** = [(Total Minutes in Month - Downtime) / Total Minutes in Month] * 100
 - Monitoring tools and reports will track availability.
 
-#### Downtime:
+#### Downtime
 Downtime refers to the period when the search engine is inaccessible or unusable due to reasons under the Provider’s control.
 
 ### 3.2 Performance Metrics
@@ -58,12 +58,12 @@ The Provider offers the following support channels:
 
 ### 4.2 Support Response Times
 
-| Severity Level      | Definition                                  | Response Time       | Resolution Time     |
-|----------------------|---------------------------------------------|---------------------|---------------------|
-| **Critical**        | Service unavailable or severe impact        | 1 hour              | 4 hours             |
-| **High**            | Significant functionality impairment        | 2 hours             | 8 hours             |
-| **Medium**          | Minor functionality issues                  | 4 hours             | 24 hours            |
-| **Low**             | Non-urgent, general questions or requests   | 8 hours             | 72 hours            |
+| Severity Level | Definition                                | Response Time | Resolution Time |
+|----------------|-------------------------------------------|---------------|-----------------|
+| **Critical**   | Service unavailable or severe impact      | 1 hour        | 4 hours         |
+| **High**       | Significant functionality impairment      | 2 hours       | 8 hours         |
+| **Medium**     | Minor functionality issues                | 4 hours       | 24 hours        |
+| **Low**        | Non-urgent, general questions or requests | 8 hours       | 72 hours        |
 
 *Response times are calculated during business hours [9 AM - 5 PM, Client Time Zone, Monday - Friday].*
 
@@ -86,11 +86,11 @@ This SLA does not cover the following:
 
 If the Provider fails to meet the guaranteed **99.9% availability**, the Client is entitled to service credits as follows:
 
-| Monthly Uptime %      | Service Credit Percentage |
-|------------------------|---------------------------|
-| **99.0% - 99.9%**     | 5% of monthly fee         |
-| **95.0% - 99.0%**     | 10% of monthly fee, Apology        |
-| **Below 95.0%**       | 20% of monthly fee, Apology, Post Mortem        |
+| Monthly Uptime %  | Service Credit Percentage                |
+|-------------------|------------------------------------------|
+| **99.0% - 99.9%** | 5% of monthly fee                        |
+| **95.0% - 99.0%** | 10% of monthly fee, Apology              |
+| **Below 95.0%**   | 20% of monthly fee, Apology, Post Mortem |
 
 *Service credits must be requested within 15 days of the reported incident.*
 
